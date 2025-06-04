@@ -4,7 +4,7 @@ Category: Network Security
 
 Pre-requisites:-
 
-Computer Systems Basics – CPU/Memory/Storage/NIC
+Computer Systems Basics – CPU/Memory/Storage/NIC.
 Good Hands-on Experience on Linux
 Programming Skills in Python and/or C
 Basics of AI/ML
