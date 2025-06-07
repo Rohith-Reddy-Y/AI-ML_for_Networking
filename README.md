@@ -2,7 +2,7 @@
 
 Category: Network Security
 
-Pre-requisites:  
+Pre-requisites:-
 
 Computer Systems Basics – CPU/Memory/Storage/NIC
 Good Hands-on Experience on Linux
