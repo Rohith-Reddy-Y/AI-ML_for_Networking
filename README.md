@@ -22,7 +22,7 @@ Modern networks face increasing challenges in monitoring and securing traffic du
 
 Expected Outcome:
 
-Automated Network Traffic Analysis using AI/ML models to detect and classify traffic in real time.
+Automated Network Traffic Analysis using AI/ML models to detect and classify traffic in real time..
 Improved Threat Detection & Security, identifying anomalies, malware, and encrypted attacks with higher accuracy.
 Reduced False Positives & False Negatives, enhancing the efficiency of network security operations.
 Scalability & Performance Optimization, ensuring AI models can handle high-traffic environments with minimal latency.
