@@ -7,7 +7,7 @@ Pre-requisites:
 Computer Systems Basics – CPU/Memory/Storage/NIC
 Good Hands-on Experience on Linux
 Programming Skills in Python and/or C
-Basics of AI/ML..
+Basics of AI/ML...
  
 
 Problem Statement
