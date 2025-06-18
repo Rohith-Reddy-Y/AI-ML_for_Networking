@@ -1,0 +1,6 @@
+[submodule "ML-XSS-Detection"]
+	path = ML-XSS-Detection
+	url = https://github.com/obarrera/ML-XSS-Detection
+[submodule "SQL-Injection-Detection"]
+	path = SQL-Injection-Detection
+	url = https://github.com/saptajitbanerjee/SQL-Injection-Detection
