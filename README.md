@@ -2,19 +2,19 @@
 
 Category: Network Security
 
-Pre-requisites:  
+Pre-requisites:-
 
 Computer Systems Basics – CPU/Memory/Storage/NIC
-Good Hands-on Experience on Linux
-Programming Skills in Python and/or C
-Basics of AI/ML..
+Good Hands-on Experience on Linux..
+Programming Skills in Python and/or C./\
+Basics of AI/ML...
  
 
 Problem Statement
 
  
 
-Description:
+Description:-
 
 Modern networks face increasing challenges in monitoring and securing traffic due to the exponential growth of data, encrypted communication, and sophisticated cyber threats. Traditional rule-based security measures and deep packet inspection (DPI) techniques are becoming less effective in detecting and classifying threats, especially in encrypted traffic. Manual intervention in network traffic classification is inefficient, leading to delayed threat detection and security vulnerabilities. To address these issues, AI-driven solutions can analyze traffic patterns, detect anomalies, classify applications, and enhance security in real-time, ensuring adaptive and intelligent network defense.
 
@@ -22,7 +22,7 @@ Modern networks face increasing challenges in monitoring and securing traffic du
 
 Expected Outcome:
 
-Automated Network Traffic Analysis using AI/ML models to detect and classify traffic in real time.
+Automated Network Traffic Analysis using AI/ML models to detect and classify traffic in real time..
 Improved Threat Detection & Security, identifying anomalies, malware, and encrypted attacks with higher accuracy.
 Reduced False Positives & False Negatives, enhancing the efficiency of network security operations.
 Scalability & Performance Optimization, ensuring AI models can handle high-traffic environments with minimal latency.
