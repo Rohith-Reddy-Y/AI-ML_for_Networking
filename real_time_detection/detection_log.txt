@@ -1,0 +1,318 @@
+Request: POST /detect HTTP/1.1
+
+Host: 192.168.0.104:5000
+
+Connection: keep-alive
+
+Content-Length: 34
+
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36 Edg/137.0.0.0
+
+Content-Type: application/x-www-form-urlencoded
+
+Accept: */*
+
+Origin: http://192.168.0.104:5000
+
+Referer: http://192.168.0.104:5000/
+
+Accept-Encoding: gzip, deflate
+
+Accept-Language: en-US,en;q=0.9,en-IN;q=0.8
+
+
+
+cfile=-1 OR 2+329-329-1=0+0+0+1 --
+Error: Error during detection: 
+**********************************************************************
+  Resource [93mpunkt_tab[0m not found.
+  Please use the NLTK Downloader to obtain the resource:
+
+  [31m>>> import nltk
+  >>> nltk.download('punkt_tab')
+  [0m
+  For more information see: https://www.nltk.org/data.html
+
+  Attempted to load [93mtokenizers/punkt_tab/english/[0m
+
+  Searched in:
+    - 'C:\\Users\\Rohit/nltk_data'
+    - 'C:\\AI-ML_for_Networking\\AI-ML_for_Networking\\real_time_detection\\venv\\nltk_data'
+    - 'C:\\AI-ML_for_Networking\\AI-ML_for_Networking\\real_time_detection\\venv\\share\\nltk_data'
+    - 'C:\\AI-ML_for_Networking\\AI-ML_for_Networking\\real_time_detection\\venv\\lib\\nltk_data'
+    - 'C:\\Users\\Rohit\\AppData\\Roaming\\nltk_data'
+    - 'C:\\nltk_data'
+    - 'D:\\nltk_data'
+    - 'E:\\nltk_data'
+**********************************************************************
+
+
+Request: GET /detect HTTP/1.1
+
+Host: 192.168.0.104:5000
+
+Connection: keep-alive
+
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36 Edg/137.0.0.0
+
+Accept: */*
+
+Referer: http://192.168.0.104:5000/
+
+Accept-Encoding: gzip, deflate
+
+Accept-Language: en-US,en;q=0.9,en-IN;q=0.8
+
+
+
+
+Error: Error during detection: 
+**********************************************************************
+  Resource [93mpunkt_tab[0m not found.
+  Please use the NLTK Downloader to obtain the resource:
+
+  [31m>>> import nltk
+  >>> nltk.download('punkt_tab')
+  [0m
+  For more information see: https://www.nltk.org/data.html
+
+  Attempted to load [93mtokenizers/punkt_tab/english/[0m
+
+  Searched in:
+    - 'C:\\Users\\Rohit/nltk_data'
+    - 'C:\\AI-ML_for_Networking\\AI-ML_for_Networking\\real_time_detection\\venv\\nltk_data'
+    - 'C:\\AI-ML_for_Networking\\AI-ML_for_Networking\\real_time_detection\\venv\\share\\nltk_data'
+    - 'C:\\AI-ML_for_Networking\\AI-ML_for_Networking\\real_time_detection\\venv\\lib\\nltk_data'
+    - 'C:\\Users\\Rohit\\AppData\\Roaming\\nltk_data'
+    - 'C:\\nltk_data'
+    - 'D:\\nltk_data'
+    - 'E:\\nltk_data'
+**********************************************************************
+
+
+Request: GET /detect HTTP/1.1
+
+Host: 192.168.0.104:5000
+
+Connection: keep-alive
+
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36 Edg/137.0.0.0
+
+Accept: */*
+
+Referer: http://192.168.0.104:5000/
+
+Accept-Encoding: gzip, deflate
+
+Accept-Language: en-US,en;q=0.9,en-IN;q=0.8
+
+
+
+
+Error: Error during detection: 
+**********************************************************************
+  Resource [93mpunkt_tab[0m not found.
+  Please use the NLTK Downloader to obtain the resource:
+
+  [31m>>> import nltk
+  >>> nltk.download('punkt_tab')
+  [0m
+  For more information see: https://www.nltk.org/data.html
+
+  Attempted to load [93mtokenizers/punkt_tab/english/[0m
+
+  Searched in:
+    - 'C:\\Users\\Rohit/nltk_data'
+    - 'C:\\AI-ML_for_Networking\\AI-ML_for_Networking\\real_time_detection\\venv\\nltk_data'
+    - 'C:\\AI-ML_for_Networking\\AI-ML_for_Networking\\real_time_detection\\venv\\share\\nltk_data'
+    - 'C:\\AI-ML_for_Networking\\AI-ML_for_Networking\\real_time_detection\\venv\\lib\\nltk_data'
+    - 'C:\\Users\\Rohit\\AppData\\Roaming\\nltk_data'
+    - 'C:\\nltk_data'
+    - 'D:\\nltk_data'
+    - 'E:\\nltk_data'
+**********************************************************************
+
+
+Request: GET /detect HTTP/1.1
+
+Host: 192.168.0.104:5000
+
+Connection: keep-alive
+
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36 Edg/137.0.0.0
+
+Accept: */*
+
+Referer: http://192.168.0.104:5000/
+
+Accept-Encoding: gzip, deflate
+
+Accept-Language: en-US,en;q=0.9,en-IN;q=0.8
+
+
+
+
+Error: Error during detection: This RandomForestClassifier instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+
+Request: POST /detect HTTP/1.1
+
+Host: 192.168.0.104:5000
+
+Connection: keep-alive
+
+Content-Length: 34
+
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36 Edg/137.0.0.0
+
+Content-Type: application/x-www-form-urlencoded
+
+Accept: */*
+
+Origin: http://192.168.0.104:5000
+
+Referer: http://192.168.0.104:5000/
+
+Accept-Encoding: gzip, deflate
+
+Accept-Language: en-US,en;q=0.9,en-IN;q=0.8
+
+
+
+cfile=-1 OR 2+329-329-1=0+0+0+1 --
+Error: Error during detection: This RandomForestClassifier instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+
+Request: POST /detect HTTP/1.1
+
+Host: 192.168.0.104:5000
+
+Connection: keep-alive
+
+Content-Length: 34
+
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36 Edg/137.0.0.0
+
+Content-Type: application/x-www-form-urlencoded
+
+Accept: */*
+
+Origin: http://192.168.0.104:5000
+
+Referer: http://192.168.0.104:5000/
+
+Accept-Encoding: gzip, deflate
+
+Accept-Language: en-US,en;q=0.9,en-IN;q=0.8
+
+
+
+cfile=-1 OR 2+329-329-1=0+0+0+1 --
+Error: Error during detection: This RandomForestClassifier instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+
+Request: POST /detect HTTP/1.1
+Host: 192.168.0.104:5000
+Connection: keep-alive
+Content-Length: 34
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36 Edg/137.0.0.0
+Content-Type: application/x-www-form-urlencoded
+Accept: */*
+Origin: http://192.168.0.104:5000
+Referer: http://192.168.0.104:5000/
+Accept-Encoding: gzip, deflate
+Accept-Language: en-US,en;q=0.9,en-IN;q=0.8
+
+cfile=-1 OR 2+329-329-1=0+0+0+1 --
+Error: Error during detection: This RandomForestClassifier instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+
+Request: POST /detect HTTP/1.1
+Host: 192.168.0.104:5000
+Connection: keep-alive
+Content-Length: 13
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36 Edg/137.0.0.0
+Content-Type: application/x-www-form-urlencoded
+Accept: */*
+Origin: http://192.168.0.104:5000
+Referer: http://192.168.0.104:5000/
+Accept-Encoding: gzip, deflate
+Accept-Language: en-US,en;q=0.9,en-IN;q=0.8
+
+' or 1=1 -- .
+Error: Error during detection: This RandomForestClassifier instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+
+Request: POST /detect HTTP/1.1
+Host: 192.168.0.104:5000
+Connection: keep-alive
+Content-Length: 13
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36 Edg/137.0.0.0
+Content-Type: application/x-www-form-urlencoded
+Accept: */*
+Origin: http://192.168.0.104:5000
+Referer: http://192.168.0.104:5000/
+Accept-Encoding: gzip, deflate
+Accept-Language: en-US,en;q=0.9,en-IN;q=0.8
+
+' or 1=1 -- .
+Error: Error during detection: This RandomForestClassifier instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+
+Request: POST /detect HTTP/1.1
+Host: 192.168.0.104:5000
+Connection: keep-alive
+Content-Length: 13
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36 Edg/137.0.0.0
+Content-Type: application/x-www-form-urlencoded
+Accept: */*
+Origin: http://192.168.0.104:5000
+Referer: http://192.168.0.104:5000/
+Accept-Encoding: gzip, deflate
+Accept-Language: en-US,en;q=0.9,en-IN;q=0.8
+
+' or 1=1 -- .
+Error: Error during detection: This RandomForestClassifier instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+
+Request: POST /detect HTTP/1.1
+Host: 192.168.0.104:5000
+Connection: keep-alive
+Content-Length: 13
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36 Edg/137.0.0.0
+Content-Type: application/x-www-form-urlencoded
+Accept: */*
+Origin: http://192.168.0.104:5000
+Referer: http://192.168.0.104:5000/
+Accept-Encoding: gzip, deflate
+Accept-Language: en-US,en;q=0.9,en-IN;q=0.8
+
+' or 1=1 -- .
+Error: Error during detection: This RandomForestClassifier instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+
+Request: POST /detect HTTP/1.1
+Host: 192.168.0.104:5000
+Connection: keep-alive
+Content-Length: 13
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36 Edg/137.0.0.0
+Content-Type: application/x-www-form-urlencoded
+Accept: */*
+Origin: http://192.168.0.104:5000
+Referer: http://192.168.0.104:5000/
+Accept-Encoding: gzip, deflate
+Accept-Language: en-US,en;q=0.9,en-IN;q=0.8
+
+' or 1=1 -- .
+Error: Error during detection: This RandomForestClassifier instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+
+Request: GET /detect HTTP/1.1
+Host: 127.0.0.1:5000
+Connection: keep-alive
+Sec-Ch-Ua-Platform: "Windows"
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36 Edg/137.0.0.0
+Sec-Ch-Ua: "Microsoft Edge";v="137", "Chromium";v="137", "Not/A)Brand";v="24"
+Sec-Ch-Ua-Mobile: ?0
+Accept: */*
+Sec-Fetch-Site: same-origin
+Sec-Fetch-Mode: cors
+Sec-Fetch-Dest: empty
+Referer: http://127.0.0.1:5000/
+Accept-Encoding: gzip, deflate, br, zstd
+Accept-Language: en-US,en;q=0.9,en-IN;q=0.8
+
+
+Error: Error during detection: This RandomForestClassifier instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+

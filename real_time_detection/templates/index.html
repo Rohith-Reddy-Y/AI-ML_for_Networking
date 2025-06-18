@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+     <html lang="en">
+     <head>
+         <meta charset="UTF-8">
+         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+         <title>Real-Time SQL Injection & XSS Detection</title>
+         <style>
+             body {
+                 font-family: Arial, sans-serif;
+                 margin: 0;
+                 padding: 20px;
+                 background-color: #f4f4f4;
+             }
+             .container {
+                 max-width: 800px;
+                 margin: 0 auto;
+                 background: white;
+                 padding: 20px;
+                 border-radius: 8px;
+                 box-shadow: 0 0 10px rgba(0,0,0,0.1);
+             }
+             h1 {
+                 text-align: center;
+                 color: #333;
+             }
+             .form-group {
+                 margin-bottom: 15px;
+             }
+             label {
+                 display: block;
+                 margin-bottom: 5px;
+                 font-weight: bold;
+             }
+             select, input[type="text"], textarea {
+                 width: 100%;
+                 padding: 8px;
+                 margin-bottom: 10px;
+                 border: 1px solid #ddd;
+                 border-radius: 4px;
+                 box-sizing: border-box;
+             }
+             button {
+                 background-color: #007bff;
+                 color: white;
+                 padding: 10px 20px;
+                 border: none;
+                 border-radius: 4px;
+                 cursor: pointer;
+             }
+             button:hover {
+                 background-color: #0056b3;
+             }
+             #result {
+                 margin-top: 20px;
+                 padding: 10px;
+                 border: 1px solid #ddd;
+                 border-radius: 4px;
+                 background-color: #f9f9f9;
+                 display: none;
+             }
+             .error {
+                 color: red;
+                 font-weight: bold;
+             }
+             .success {
+                 color: green;
+                 font-weight: bold;
+             }
+         </style>
+     </head>
+     <body>
+         <div class="container">
+             <h1>Real-Time SQL Injection & XSS Detection</h1>
+             <div class="form-group">
+                 <label for="method">Request Method:</label>
+                 <select id="method" name="method">
+                     <option value="GET">GET</option>
+                     <option value="POST">POST</option>
+                 </select>
+             </div>
+             <div class="form-group">
+                 <label for="query">Input Query (e.g., URL query or POST body):</label>
+                 <textarea id="query" name="query" rows="4" placeholder="Enter your query here (e.g., cfile=-1 OR 1=1 -- or <script>alert('xss')</script>)"></textarea>
+             </div>
+             <button onclick="detect()">Detect</button>
+             <div id="result">
+                 <p><strong>SQL Injection:</strong> <span id="sql-result"></span></p>
+                 <p><strong>XSS:</strong> <span id="xss-result"></span></p>
+             </div>
+         </div>
+
+         <script>
+             async function detect() {
+                 const method = document.getElementById('method').value;
+                 const query = document.getElementById('query').value.trim();
+                 const resultDiv = document.getElementById('result');
+                 const sqlResult = document.getElementById('sql-result');
+                 const xssResult = document.getElementById('xss-result');
+
+                 if (!query) {
+                     alert('Please enter a query to test.');
+                     return;
+                 }
+
+                 resultDiv.style.display = 'none';
+                 sqlResult.className = '';
+                 xssResult.className = '';
+
+                 try {
+                     let response;
+                     if (method === 'GET') {
+                         response = await fetch(`/detect?query=${encodeURIComponent(query)}`, {
+                             method: 'GET'
+                         });
+                     } else {
+                         response = await fetch('/detect', {
+                             method: 'POST',
+                             headers: {
+                                 'Content-Type': 'application/x-www-form-urlencoded',
+                             },
+                             body: query
+                         });
+                     }
+
+                     const data = await response.json();
+                     if (data.error) {
+                         sqlResult.textContent = 'Error';
+                         xssResult.textContent = 'Error';
+                         sqlResult.className = 'error';
+                         xssResult.className = 'error';
+                         console.error('Detection error:', data.error);
+                     } else {
+                         sqlResult.textContent = data.sql_injection;
+                         xssResult.textContent = data.xss;
+                         sqlResult.className = data.sql_injection.includes('Detected') ? 'error' : 'success';
+                         xssResult.className = data.xss.includes('Detected') ? 'error' : 'success';
+                     }
+                     resultDiv.style.display = 'block';
+                 } catch (error) {
+                     sqlResult.textContent = 'Error';
+                     xssResult.textContent = 'Error';
+                     sqlResult.className = 'error';
+                     xssResult.className = 'error';
+                     resultDiv.style.display = 'block';
+                     console.error('Fetch error:', error);
+                 }
+             }
+         </script>
+     </body>
+     </html>
