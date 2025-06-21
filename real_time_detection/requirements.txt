@@ -1,0 +1,9 @@
+numpy==1.26.4
+pandas
+gensim==4.3.3
+python-Levenshtein
+nltk==3.9.1
+scikit-learn==1.7.0
+chardet
+flask
+waitress

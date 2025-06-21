@@ -1,152 +1,441 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Real-Time SQL Injection & XSS Detection</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-            background-color: #f4f4f4;
-        }
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        }
-        h1 {
-            text-align: center;
-            color: #333;
-        }
-        .form-group {
-            margin-bottom: 15px;
-        }
-        label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-        select, input[type="text"], textarea {
-            width: 100%;
-            padding: 8px;
-            margin-bottom: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            box-sizing: border-box;
-        }
-        button {
-            background-color: #007bff;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #0056b3;
-        }
-        #result {
-            margin-top: 20px;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            background-color: #f9f9f9;
-            display: none;
-        }
-        .error {
-            color: red;
-            font-weight: bold;
-        }
-        .success {
-            color: green;
-            font-weight: bold;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Real-Time SQLi & XSS Detection</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background: linear-gradient(135deg, #1d1d1d, #3c3c3c);
+      color: #fff;
+      padding: 2rem;
+      font-family: 'Segoe UI', sans-serif;
+    }
+    .container {
+      max-width: 700px;
+      margin: auto;
+      background: #222;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 0 15px rgba(255, 0, 0, 0.3);
+    }
+    h1 {
+      text-align: center;
+      color: #ff4c4c;
+      margin-bottom: 30px;
+    }
+    .form-control, .form-select {
+      background: #111;
+      color: #fff;
+      border: 1px solid #666;
+    }
+    .btn-primary {
+      background-color: #ff3333;
+      border: none;
+    }
+    .btn-primary:hover {
+      background-color: #cc0000;
+    }
+    #result {
+      margin-top: 20px;
+      padding: 20px;
+      border-radius: 8px;
+      background-color: #111;
+      box-shadow: 0 0 10px rgba(255, 0, 0, 0.2);
+      display: none;
+    }
+    .detected {
+      color: #ff4c4c;
+      font-weight: bold;
+      animation: pulse 1.4s infinite;
+    }
+    .not-detected {
+      color: #70e000;
+      font-weight: 600;
+      animation: subtlePulse 2.4s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.15); }
+    }
+    @keyframes subtlePulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(0.95); }
+    }
+    .threat-info {
+      background: #2d0000;
+      padding: 12px;
+      margin-top: 12px;
+      border-radius: 8px;
+      border-left: 4px solid #ff4c4c;
+      display: none;
+      font-size: 0.9rem;
+    }
+    .threat-info ul {
+      padding-left: 20px;
+      margin: 0;
+    }
+    .toggle-btn {
+      margin-top: 10px;
+      font-size: 0.85rem;
+      color: #ff9999;
+      cursor: pointer;
+      text-decoration: underline;
+    }
+    #learn-more-section {
+      background: #1a1a1a;
+      padding: 15px;
+      border-radius: 8px;
+      border-left: 4px solid #4d79ff;
+      margin-top: 20px;
+      display: none;
+    }
+    #threat-question {
+      background: #111;
+      color: white;
+      border: 1px solid #444;
+    }
+    #threat-explanation {
+      background: #1a2a3a;
+      color: #e0e0e0;
+      border-left: 4px solid #4d79ff;
+      padding: 10px;
+      border-radius: 5px;
+      margin-top: 10px;
+      display: none;
+    }
+    .progress-container {
+      margin-top: 15px;
+      display: none;
+    }
+    .progress-bar {
+      transition: width 0.3s ease;
+    }
+    .table-hover tbody tr:hover {
+      background-color: #333;
+    }
+    .text-break {
+      word-break: break-all;
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Real-Time SQL Injection & XSS Detection</h1>
-        <div class="form-group">
-            <label for="method">Request Method:</label>
-            <select id="method" name="method">
-                <option value="GET">GET</option>
-                <option value="POST">POST</option>
-            </select>
+  <div class="container">
+    <h1>🛡️ Real-Time SQLi & XSS Detection</h1>
+    <div class="mb-3">
+      <label for="method" class="form-label">Request Method:</label>
+      <select id="method" class="form-select">
+        <option value="GET">GET</option>
+        <option value="POST">POST</option>
+      </select>
+    </div>
+    <div class="mb-3">
+      <label for="query" class="form-label">Input Query:</label>
+      <textarea id="query" class="form-control" rows="4"
+        placeholder="Example: cfile=-1 OR 1=1 -- or <script>alert('xss')</script>"></textarea>
+    </div>
+    <button class="btn btn-primary w-100" onclick="detect()">Detect Threat</button>
+    <div id="result">
+      <p><strong>SQL Injection:</strong> <span id="sql-result"></span></p>
+      <div id="sql-toggle" class="toggle-btn" onclick="toggleThreat('sql-info')" style="display:none;">
+        View Potential SQLi Threat
+      </div>
+      <div id="sql-info" class="threat-info"></div>
+      
+      <p class="mt-3"><strong>XSS:</strong> <span id="xss-result"></span></p>
+      <div id="xss-toggle" class="toggle-btn" onclick="toggleThreat('xss-info')" style="display:none;">
+        View Potential XSS Threat
+      </div>
+      <div id="xss-info" class="threat-info"></div>
+      
+      <div id="learn-more-section">
+        <h4>❓ Have questions about these threats?</h4>
+        <div class="input-group mb-3">
+          <input type="text" id="threat-question" class="form-control" placeholder="Ask about any threat (e.g. 'Explain Data Breach risk')">
+          <button class="btn btn-outline-secondary" type="button" onclick="askAboutThreat()">Ask</button>
         </div>
-        <div class="form-group">
-            <label for="query">Input Query (e.g., URL query or POST body):</label>
-            <textarea id="query" name="query" rows="4" placeholder="Enter your query here (e.g., cfile=-1 OR 1=1 -- or <script>alert('xss')</script>)"></textarea>
-        </div>
-        <button onclick="detect()">Detect</button>
-        <div id="result">
-            <p><strong>SQL Injection:</strong> <span id="sql-result"></span></p>
-            <p><strong>XSS:</strong> <span id="xss-result"></span></p>
-        </div>
+        <div id="threat-explanation"></div>
+      </div>
     </div>
 
-    <script>
-        async function detect() {
-            const method = document.getElementById('method').value;
-            const query = document.getElementById('query').value.trim();
-            const resultDiv = document.getElementById('result');
-            const sqlResult = document.getElementById('sql-result');
-            const xssResult = document.getElementById('xss-result');
+    <div class="mb-3 mt-4">
+      <h3 class="text-center">Or Upload a File</h3>
+      <form id="uploadForm" enctype="multipart/form-data">
+        <div class="mb-3">
+          <label for="file" class="form-label">Upload CSV, PDF, DOCX or TXT file:</label>
+          <input class="form-control" type="file" id="file" accept=".csv,.pdf,.docx,.txt">
+        </div>
+        <button type="button" class="btn btn-primary w-100" onclick="uploadFile()">Analyze File</button>
+      </form>
+      <div id="progressContainer" class="progress-container">
+        <div class="d-flex justify-content-between mb-1">
+          <span>Processing...</span>
+          <span id="progressStatus">0%</span>
+        </div>
+        <div class="progress">
+          <div id="progressBar" class="progress-bar progress-bar-striped progress-bar-animated bg-danger" role="progressbar" style="width: 0%"></div>
+        </div>
+      </div>
+    </div>
 
-            if (!query) {
-                alert('Please enter a query to test.');
-                return;
-            }
+    <div id="fileResults" style="display: none; margin-top: 20px;">
+      <h4>File Analysis Results</h4>
+      <div id="analysisStats" class="alert alert-info mb-3"></div>
+      <div id="resultsTable" class="table-responsive"></div>
+    </div>
+  </div>
 
-            resultDiv.style.display = 'none';
-            sqlResult.className = '';
-            xssResult.className = '';
+  <script>
+    function toggleThreat(id) {
+      const box = document.getElementById(id);
+      box.style.display = box.style.display === 'none' ? 'block' : 'none';
+    }
 
-            try {
-                let response;
-                if (method === 'GET') {
-                    response = await fetch(`http://127.0.0.1:5000/detect?query=${encodeURIComponent(query)}`, {
-                        method: 'GET'
-                    });
-                } else {
-                    const params = new URLSearchParams();
-                    params.append('query', query);
-                    response = await fetch('http://127.0.0.1:5000/detect', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/x-www-form-urlencoded',
-                        },
-                        body: params.toString()
-                    });
-                }
+    async function detect() {
+      const method = document.getElementById('method').value;
+      const query = document.getElementById('query').value.trim();
+      const resultDiv = document.getElementById('result');
+      const sqlResult = document.getElementById('sql-result');
+      const xssResult = document.getElementById('xss-result');
+      const sqlToggle = document.getElementById('sql-toggle');
+      const xssToggle = document.getElementById('xss-toggle');
+      const sqlInfo = document.getElementById('sql-info');
+      const xssInfo = document.getElementById('xss-info');
+      const learnMoreSection = document.getElementById('learn-more-section');
 
-                const data = await response.json();
-                if (data.error) {
-                    sqlResult.textContent = 'Error';
-                    xssResult.textContent = 'Error';
-                    sqlResult.className = 'error';
-                    xssResult.className = 'error';
-                    console.error('Detection error:', data.error);
-                } else {
-                    sqlResult.textContent = data.sql_injection;
-                    xssResult.textContent = data.xss;
-                    sqlResult.className = data.sql_injection.includes('Detected') ? 'error' : 'success';
-                    xssResult.className = data.xss.includes('Detected') ? 'error' : 'success';
-                }
-                resultDiv.style.display = 'block';
-            } catch (error) {
-                sqlResult.textContent = 'Error';
-                xssResult.textContent = 'Error';
-                sqlResult.className = 'error';
-                xssResult.className = 'error';
-                resultDiv.style.display = 'block';
-                console.error('Fetch error:', error);
-            }
+      if (!query) {
+        alert('Please enter a query to test.');
+        return;
+      }
+
+      // Reset UI
+      resultDiv.style.display = 'none';
+      [sqlResult, xssResult].forEach(el => el.className = '');
+      [sqlToggle, xssToggle, sqlInfo, xssInfo].forEach(el => el.style.display = 'none');
+      [sqlInfo, xssInfo].forEach(el => el.innerHTML = '');
+      learnMoreSection.style.display = 'none';
+      document.getElementById('threat-explanation').style.display = 'none';
+
+      // Call detection API
+      const url = method === 'GET'
+        ? `/detect?query=${encodeURIComponent(query)}`
+        : `/detect`;
+      const opts = method === 'POST'
+        ? { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: `query=${encodeURIComponent(query)}` }
+        : {};
+
+      let det;
+      try {
+        const res = await fetch(url, opts);
+        det = await res.json();
+      } catch (e) {
+        det = { sql_injection: 'Error', xss: 'Error' };
+      }
+
+      // Display verdicts
+      const sqlDet = det.sql_injection || 'Error';
+      const xssDet = det.xss || 'Error';
+      const isSQL = sqlDet.includes('Detected');
+      const isXSS = xssDet.includes('Detected');
+
+      sqlResult.textContent = sqlDet;
+      xssResult.textContent = xssDet;
+      sqlResult.className = isSQL ? 'detected' : 'not-detected';
+      xssResult.className = isXSS ? 'detected' : 'not-detected';
+
+      // Fetch threats if detected
+      if (isSQL || isXSS) {
+        learnMoreSection.style.display = 'block';
+        
+        try {
+          const aiRes = await fetch('/ai-threats', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ query })
+          });
+          const aiJson = await aiRes.json();
+          let text = aiJson.threats || aiJson.error || '- ⚠️ Unable to generate threat details.';
+          // Clean and format threats
+          const lines = text.trim().split(/\r?\n/).filter(ln => ln.trim().startsWith('-')).map(ln => ln.replace(/^-+\s*/, ''));
+          const html = lines.length > 0 ? '<ul style="padding-left:20px;">' + lines.map(ln => `<li>${ln}</li>`).join('') + '</ul>' : '<p>No specific threats identified.</p>';
+          if (isSQL) {
+            sqlToggle.style.display = 'block';
+            sqlInfo.innerHTML = html;
+          }
+          if (isXSS) {
+            xssToggle.style.display = 'block';
+            xssInfo.innerHTML = html;
+          }
+        } catch (e) {
+          const errorMsg = '<ul><li>⚠️ Error fetching threat details.</li></ul>';
+          if (isSQL) {
+            sqlToggle.style.display = 'block';
+            sqlInfo.innerHTML = errorMsg;
+          }
+          if (isXSS) {
+            xssToggle.style.display = 'block';
+            xssInfo.innerHTML = errorMsg;
+          }
         }
-    </script>
+      }
+
+      resultDiv.style.display = 'block';
+    }
+
+    async function askAboutThreat() {
+      const question = document.getElementById('threat-question').value.trim();
+      const explanationDiv = document.getElementById('threat-explanation');
+      
+      if (!question) {
+        explanationDiv.textContent = "Please enter a question about the threats";
+        explanationDiv.style.display = 'block';
+        return;
+      }
+
+      explanationDiv.innerHTML = '<div class="text-center"><div class="spinner-border spinner-border-sm" role="status"><span class="visually-hidden">Loading...</span></div> Researching your question...</div>';
+      explanationDiv.style.display = 'block';
+
+      try {
+        const response = await fetch('/explain-threat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ 
+            question: question,
+            current_threats: document.querySelector('.threat-info') ? document.querySelector('.threat-info').innerText : ''
+          })
+        });
+        
+        const data = await response.json();
+        
+        if (data.error) {
+          explanationDiv.innerHTML = `<div class="alert alert-danger">${data.error}</div>`;
+          return;
+        }
+        
+        explanationDiv.innerHTML = `
+          <div class="alert alert-info">
+            <strong>Explanation:</strong><br>
+            ${data.explanation.replace(/\n/g, '<br>')}
+          </div>
+        `;
+      } catch (error) {
+        explanationDiv.innerHTML = `<div class="alert alert-danger">Error: ${error.message}</div>`;
+      }
+    }
+
+    async function uploadFile() {
+      const fileInput = document.getElementById('file');
+      const fileResults = document.getElementById('fileResults');
+      const resultsTable = document.getElementById('resultsTable');
+      const progressContainer = document.getElementById('progressContainer');
+      const progressBar = document.getElementById('progressBar');
+      const progressStatus = document.getElementById('progressStatus');
+      const analysisStats = document.getElementById('analysisStats');
+      
+      if (!fileInput.files.length) {
+        alert('Please select a file first');
+        return;
+      }
+
+      fileResults.style.display = 'none';
+      progressContainer.style.display = 'block';
+      resultsTable.innerHTML = '';
+      progressBar.style.width = '0%';
+      progressStatus.textContent = '0%';
+
+      const formData = new FormData();
+      formData.append('file', fileInput.files[0]);
+
+      try {
+        // Show initial progress
+        updateProgress(10, 'Starting analysis...');
+        
+        const response = await fetch('/upload', {
+          method: 'POST',
+          body: formData
+        });
+        
+        // Simulate progress updates (in a real app, you might use WebSockets or polling)
+        updateProgress(30, 'Processing file...');
+        await new Promise(resolve => setTimeout(resolve, 500));
+        updateProgress(60, 'Analyzing content...');
+        await new Promise(resolve => setTimeout(resolve, 500));
+        
+        const data = await response.json();
+        
+        if (data.error) {
+          updateProgress(100, 'Error occurred');
+          resultsTable.innerHTML = `<div class="alert alert-danger">${data.error}</div>`;
+          return;
+        }
+        
+        updateProgress(90, 'Finalizing results...');
+        
+        // Build stats display
+        analysisStats.innerHTML = `
+          <strong>Analysis Summary:</strong><br>
+          Processed ${data.stats.total_queries} queries in ${data.stats.processing_time}<br>
+          SQLi Detected: <span class="detected">${data.stats.sql_detected}</span> | 
+          XSS Detected: <span class="detected">${data.stats.xss_detected}</span>
+        `;
+        
+        // Build results table
+        let tableHtml = `
+          <table class="table table-dark table-striped table-hover">
+            <thead>
+              <tr>
+                <th>Query</th>
+                <th>SQL Injection</th>
+                <th>XSS</th>
+              </tr>
+            </thead>
+            <tbody>
+        `;
+        
+        data.results.forEach(result => {
+          const sqlClass = result.sql_injection.includes('Detected') ? 'detected' : 'not-detected';
+          const xssClass = result.xss.includes('Detected') ? 'detected' : 'not-detected';
+          
+          tableHtml += `
+            <tr>
+              <td><code class="text-break">${result.query}</code></td>
+              <td class="${sqlClass}">${result.sql_injection}</td>
+              <td class="${xssClass}">${result.xss}</td>
+            </tr>
+          `;
+        });
+        
+        tableHtml += `</tbody></table>`;
+        resultsTable.innerHTML = tableHtml;
+        fileResults.style.display = 'block';
+        
+        updateProgress(100, 'Analysis complete');
+        
+        // Scroll to results
+        setTimeout(() => {
+          fileResults.scrollIntoView({ behavior: 'smooth' });
+          progressContainer.style.display = 'none';
+        }, 500);
+        
+      } catch (error) {
+        updateProgress(100, 'Error occurred');
+        resultsTable.innerHTML = `
+          <div class="alert alert-danger">
+            <strong>Error:</strong> ${error.message}<br>
+            Please try a smaller file or check the file format.
+          </div>
+        `;
+        fileResults.style.display = 'block';
+      }
+    }
+
+    function updateProgress(percent, message) {
+      const progressBar = document.getElementById('progressBar');
+      const progressStatus = document.getElementById('progressStatus');
+      progressBar.style.width = `${percent}%`;
+      progressStatus.textContent = `${percent}% - ${message}`;
+    }
+  </script>
 </body>
 </html>

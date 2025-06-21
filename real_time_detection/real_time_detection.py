@@ -1,5 +1,3 @@
-
-import base64
 from urllib.parse import unquote, unquote_plus
 from flask import Flask, request, render_template, jsonify
 import pandas as pd
@@ -7,203 +5,537 @@ import numpy as np
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
-from sklearn.metrics import accuracy_score
 import pickle
 from gensim.models.doc2vec import Doc2Vec
 from nltk.tokenize import word_tokenize
 import nltk
 import os
-import chardet
-import re
 import warnings
-# Suppress version warnings temporarily for clarity
+import requests
+from dotenv import load_dotenv
+import datetime
+import io
+import csv
+import PyPDF2
+from docx import Document
+
 warnings.filterwarnings("ignore", category=UserWarning)
-# Download NLTK data
+
+# Try to import optional dependencies
+try:
+    from flask_limiter import Limiter
+    from flask_limiter.util import get_remote_address
+    from flask_caching import Cache
+    LIMITER_AVAILABLE = True
+except ImportError:
+    LIMITER_AVAILABLE = False
+    print("Warning: flask_limiter or flask_caching not available - running without rate limiting")
+
+try:
+    import google.generativeai as genai
+    from google.generativeai.types import GenerationConfig
+    GEMINI_AVAILABLE = True
+except ImportError:
+    GEMINI_AVAILABLE = False
+    print("Warning: google-generativeai package not available - Gemini features disabled")
+
+# Download NLTK tokenizer data
 try:
     nltk.download('punkt')
-    nltk.download('punkt_tab')
 except Exception as e:
     print(f"Error downloading NLTK data: {e}")
     exit(1)
+
+# Load environment variables
+load_dotenv()
+print("HF_API_TOKEN is:", os.getenv("HF_API_TOKEN"))
+
 app = Flask(__name__)
-# SQL Injection Detection: Feature Extraction (6 features)
-badwords = ['sleep', 'drop', 'uid', 'uname', 'select', 'waitfor', 'delay', 'system', 'union', 'order by', 'group by', 'insert', 'update', 'delete']
+
+# Configure rate limiting if available
+if LIMITER_AVAILABLE:
+    limiter = Limiter(
+        app=app,
+        key_func=get_remote_address,
+        default_limits=["200 per day", "50 per hour"]
+    )
+    cache = Cache(config={'CACHE_TYPE': 'SimpleCache'})
+    cache.init_app(app)
+else:
+    # Create dummy limiter decorator
+    def limiter(*args, **kwargs):
+        def decorator(f):
+            return f
+        return decorator
+
+GEMINI_API_KEY = os.getenv("GOOGLE_API_KEY") or None
+HF_API_TOKEN = os.getenv("HF_API_TOKEN") or None
+
+# Configure Gemini SDK if available
+if GEMINI_AVAILABLE and GEMINI_API_KEY:
+    genai.configure(api_key=GEMINI_API_KEY)
+    gemini_model = genai.GenerativeModel("gemini-1.5-flash")
+else:
+    gemini_model = None
+    print("Warning: Gemini AI not available - using fallback threat analysis")
+
+# SQL/XSS feature detection setup
+badwords = ['sleep', 'drop', 'uid', 'uname', 'select', 'waitfor', 'delay', 
+            'system', 'union', 'order by', 'group by', 'insert', 'update', 'delete']
 sql_keywords = ['or', 'and', 'union', 'select', 'insert', 'update', 'delete']
+
+# Initialize detection log
+DETECTION_LOG = "detection_log.txt"
+if not os.path.exists(DETECTION_LOG):
+    with open(DETECTION_LOG, 'w', encoding='utf-8') as f:
+        f.write("")
+
+def log_detection(method, query, sql_features, sql_prediction, xss_features, xss_prediction, sql_result, xss_result, error=None):
+    """Log detailed detection results to file with UI-matched formatting"""
+    timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    
+    log_entry = f"🛡️ Real-Time SQLi & XSS Detection\n"
+    log_entry += f"Request Method: {method}\n"
+    log_entry += f"Input Query: {query}\n"
+    log_entry += f"SQL Injection: {sql_result}\n"
+    log_entry += f"XSS: {xss_result}\n\n"
+    
+    log_entry += f"Timestamp: {timestamp}\n"
+    log_entry += f"SQL Features: {sql_features}\n"
+    log_entry += f"SQL Prediction: {sql_prediction}\n"
+    log_entry += f"XSS Features: {xss_features}\n"
+    log_entry += f"XSS Prediction: {xss_prediction}\n"
+    
+    if error:
+        log_entry += f"Error: {error}\n"
+    
+    log_entry += "\n" + "="*80 + "\n\n"
+    
+    with open(DETECTION_LOG, 'a', encoding='utf-8') as f:
+        f.write(log_entry)
+
+def process_csv(file):
+    """Process CSV file and extract queries"""
+    try:
+        content = file.read().decode('utf-8')
+        csv_reader = csv.reader(io.StringIO(content))
+        next(csv_reader)  # Skip header
+        queries = [row[0] for row in csv_reader if row and row[0].strip()]  # Filter out empty rows
+        return queries
+    except Exception as e:
+        print(f"Error processing CSV: {e}")
+        return []
+
+def process_pdf(file):
+    """Process PDF file and extract text"""
+    try:
+        pdf_reader = PyPDF2.PdfReader(file)
+        text = ""
+        for page in pdf_reader.pages:
+            text += page.extract_text() or ""
+        # Extract potential queries (simple heuristic)
+        queries = []
+        lines = [line.strip() for line in text.split('\n') if line.strip()]
+        for line in lines:
+            if any(kw.lower() in line.lower() for kw in sql_keywords + ['script', '<script']):
+                queries.append(line)
+        return queries if queries else lines  # Return all lines if no obvious queries found
+    except Exception as e:
+        print(f"Error processing PDF: {e}")
+        return []
+
+def process_docx(file):
+    """Process Word document and extract text"""
+    try:
+        doc = Document(file)
+        queries = []
+        for para in doc.paragraphs:
+            text = para.text.strip()
+            if text:
+                if any(kw.lower() in text.lower() for kw in sql_keywords + ['script', '<script']):
+                    queries.append(text)
+        return queries if queries else [para.text.strip() for para in doc.paragraphs if para.text.strip()]
+    except Exception as e:
+        print(f"Error processing DOCX: {e}")
+        return []
+
+def process_text_file(file):
+    """Process plain text file"""
+    try:
+        content = file.read().decode('utf-8')
+        return [line.strip() for line in content.split('\n') if line.strip()]
+    except Exception as e:
+        print(f"Error processing text file: {e}")
+        return []
+
 def extract_sql_features(input_data):
     if not input_data or not isinstance(input_data, str):
-        return [0] * 6  # Return zeros for 6 features
+        return [0]*6
     try:
-        input_data = unquote_plus(input_data.lower())
-        # Count quotes and braces only if near SQL keywords with stricter context
-        single_q = sum(1 for i, char in enumerate(input_data) if char == "'" and any(kw in input_data[max(0, i-10):i+10] for kw in sql_keywords))
-        double_q = sum(1 for i, char in enumerate(input_data) if char == '"' and any(kw in input_data[max(0, i-10):i+10] for kw in sql_keywords))
-        dashes = input_data.count("--") if any(kw in input_data for kw in sql_keywords) else 0
-        braces = sum(1 for i, char in enumerate(input_data) if char == "(" and any(kw in input_data[max(0, i-10):i+10] for kw in sql_keywords))
-        spaces = input_data.count(" ") if any(kw in input_data for kw in sql_keywords) else 0
-        badwords_count = sum(input_data.count(word) for word in badwords if word in input_data)
-        features = [single_q, double_q, dashes, braces, spaces, badwords_count]
-        print(f"SQL Features for '{input_data}': {features} (Length: {len(features)})")  # Debugging
-        return features
-    except Exception as e:
-        print(f"Error in SQL feature extraction: {e}")
-        return [0] * 6
-# XSS Detection: Advanced Feature Extraction (26 features)
+        s = unquote_plus(input_data.lower())
+        single_q = sum(1 for i, c in enumerate(s) if c == "'" and any(
+            kw in s[max(0, i-10):i+10] for kw in sql_keywords))
+        double_q = sum(1 for i, c in enumerate(s) if c == '"' and any(
+            kw in s[max(0, i-10):i+10] for kw in sql_keywords))
+        dashes = s.count("--") if any(kw in s for kw in sql_keywords) else 0
+        braces = sum(1 for i, c in enumerate(s) if c == '(' and any(
+            kw in s[max(0, i-10):i+10] for kw in sql_keywords))
+        spaces = s.count(' ') if any(kw in s for kw in sql_keywords) else 0
+        bad_count = sum(s.count(w) for w in badwords if w in s)
+        return [single_q, double_q, dashes, braces, spaces, bad_count]
+    except:
+        return [0]*6
+
+# Load Doc2Vec model for XSS features
 try:
     d2v_model = Doc2Vec.load("lib/d2v.model")
-except FileNotFoundError:
-    print("Error: 'lib/d2v.model' not found. Please ensure it is in the 'lib' directory.")
-    exit(1)
 except Exception as e:
-    print(f"Error loading Doc2Vec model: {e}")
+    print("Doc2Vec model load error:", e)
     exit(1)
-def getVec(text):
-    features = []
-    for line in text:
-        if not line or not isinstance(line, str):
-            test_data = ["default"]
-        else:
-            test_data = word_tokenize(unquote(line).lower())
+
+def getVec(text_list):
+    mats = []
+    for line in text_list:
+        tokens = word_tokenize(unquote(line).lower()) if line else ["default"]
         try:
-            v1 = d2v_model.infer_vector(test_data)
-            if len(v1) != 20:
-                raise ValueError("Doc2Vec vector length mismatch")
-        except Exception as e:
-            print(f"Doc2Vec inference error: {e}")
-            v1 = [0] * 20  # Fallback vector, 20 dimensions
-        featureVec = v1
-        try:
-            lineDecode = unquote(line)
-            lowerStr = str(lineDecode).lower()
-            # Focus on XSS-specific features
-            feature1 = sum(lowerStr.count(tag) for tag in ['script', '<script', 'iframe', 'onerror', 'onload'])
-            feature2 = sum(lowerStr.count(method) for method in ['alert', 'eval', 'exec', 'write', 'unescape'])
-            feature3 = lowerStr.count('.js')
-            feature4 = lowerStr.count('javascript')
-            feature5 = len(lowerStr) if feature1 > 0 or feature2 > 0 else 0  # Length only if XSS-like
-            feature6 = sum(1 for char in ['<', '>', '&'] if char in lowerStr and ('script' in lowerStr or 'javascript' in lowerStr))
-            feature_vec = np.append(featureVec, [feature1, feature2, feature3, feature4, feature5, feature6])
-            if len(feature_vec) != 26:
-                raise ValueError("XSS feature vector length mismatch")
-            features.append(feature_vec)
-            print(f"XSS Features for '{line}': {feature_vec} (Length: {len(feature_vec)})")  # Debugging
-        except Exception as e:
-            print(f"Error in XSS feature extraction: {e}")
-            features.append(np.append([0] * 20, [0] * 6))
-    return features
-# Load or Train Models
+            vec = d2v_model.infer_vector(tokens)
+        except:
+            vec = [0]*20
+        lower = unquote(line).lower()
+        f1 = sum(lower.count(tag) for tag in ['script', '<script', 'iframe', 'onerror', 'onload'])
+        f2 = sum(lower.count(m) for m in ['alert', 'eval', 'exec', 'write', 'unescape'])
+        f3 = lower.count('.js')
+        f4 = lower.count('javascript')
+        f5 = len(lower) if (f1 or f2) else 0
+        f6 = sum(lower.count(c) for c in ['<', '>', '&'] if 'script' in lower or 'javascript' in lower)
+        mats.append(np.append(vec, [f1, f2, f3, f4, f5, f6]))
+    return mats
+
 def load_or_train_sql_model():
     try:
         with open("sqli_model_test1.pkl", "rb") as f:
-            sql_model = pickle.load(f)
-            sql_scaler = pickle.load(f)
-    except (FileNotFoundError, EOFError, Exception) as e:
-        if not os.path.exists("demo_good_and_bad_requests_test4.csv"):
-            print("Error: 'demo_good_and_bad_requests_test4.csv' not found. Ensure it exists in the directory.")
-            exit(1)
-        
-        try:
-            df = pd.read_csv("demo_good_and_bad_requests_test4.csv")
-            print("Class distribution:", df['class'].value_counts())
-            
-            # Fix labeling if needed (example correction)
-            df['class'] = df['class'].apply(lambda x: 1 if x.lower() == 'bad' else 0)
-            if len(df['class'].unique()) < 2:
-                raise ValueError("Dataset must contain both 'good' and 'bad' classes.")
-            
-            X = df[['single_q', 'double_q', 'dashes', 'braces', 'spaces', 'badwords']].values
-            y = df['class'].values
-            X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-            sql_scaler = StandardScaler()
-            X_train_scaled = sql_scaler.fit_transform(X_train)
-            X_test_scaled = sql_scaler.transform(X_test)
-            sql_model = LogisticRegression(random_state=42)
-            sql_model.fit(X_train_scaled, y_train)
-            print(f"SQL Model Accuracy: {accuracy_score(y_test, sql_model.predict(X_test_scaled))}")
-            with open("sqli_model_test1.pkl", "wb") as f:
-                pickle.dump(sql_model, f)
-                pickle.dump(sql_scaler, f)
-        except Exception as e:
-            print(f"Error training SQL model: {e}")
-            exit(1)
-    return sql_model, sql_scaler
+            model = pickle.load(f)
+            scaler = pickle.load(f)
+            return model, scaler
+    except:
+        df = pd.read_csv("demo_good_and_bad_requests_test4.csv")
+        df['class'] = df['class'].str.lower().eq('bad').astype(int)
+        X = df[['single_q', 'double_q', 'dashes', 'braces', 'spaces', 'badwords']].values
+        y = df['class'].values
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+        scaler = StandardScaler().fit(X_train)
+        model = LogisticRegression().fit(scaler.transform(X_train), y_train)
+        with open("sqli_model_test1.pkl", "wb") as f:
+            pickle.dump(model, f)
+            pickle.dump(scaler, f)
+        return model, scaler
+
 def load_xss_model():
     try:
         with open("lib/RandomForestClassifier.sav", "rb") as f:
-            xss_model = pickle.load(f)
-        if not hasattr(xss_model, 'estimators_') or xss_model.estimators_ is None:
-            raise ValueError("Loaded RandomForestClassifier is not fitted.")
-        return xss_model
-    except FileNotFoundError:
-        print("Error: 'lib/RandomForestClassifier.sav' not found. Please ensure it is in the 'lib' directory.")
+            return pickle.load(f)
+    except:
+        print("XSS model not found or invalid.")
         exit(1)
-    except Exception as e:
-        print(f"Error loading RandomForestClassifier: {e}")
-        exit(1)
+
+# Load models
 sql_model, sql_scaler = load_or_train_sql_model()
 xss_model = load_xss_model()
-# Serve the Front-End Website
+
 @app.route('/')
 def home():
-    try:
-        return render_template('index.html')
-    except Exception as e:
-        return jsonify({"error": f"Template error: {e}"}), 500
-# Real-Time Detection Endpoint (API)
+    return render_template('index.html')
+
+@app.route('/upload', methods=['POST'])
+def upload_file():
+    if 'file' not in request.files:
+        return jsonify(error="No file uploaded"), 400
+    
+    file = request.files['file']
+    if file.filename == '':
+        return jsonify(error="No selected file"), 400
+    
+    # Determine file type and process accordingly
+    filename = file.filename.lower()
+    if filename.endswith('.csv'):
+        queries = process_csv(file)
+    elif filename.endswith('.pdf'):
+        queries = process_pdf(file)
+    elif filename.endswith('.docx'):
+        queries = process_docx(file)
+    elif filename.endswith('.txt'):
+        queries = process_text_file(file)
+    else:
+        return jsonify(error="Unsupported file type"), 400
+    
+    if not queries:
+        return jsonify(error="No queries found in file"), 400
+    
+    # Process all queries
+    results = []
+    sql_detected = 0
+    xss_detected = 0
+    start_time = datetime.datetime.now()
+
+    for query in queries:
+        try:
+            dec = unquote_plus(query)
+            sf = extract_sql_features(dec)
+            xf = getVec([dec])[0]
+            sqlp = sql_model.predict(sql_scaler.transform([sf]))[0] if sum(sf) > 0 else 0
+            xssp = xss_model.predict([xf])[0]
+            
+            sql_result = "SQL Injection Detected" if sqlp else "No SQL Injection"
+            xss_result = "XSS Detected" if xssp else "No XSS"
+            if sqlp: sql_detected += 1
+            if xssp: xss_detected += 1
+            
+            results.append({
+                'query': query,
+                'sql_injection': sql_result,
+                'xss': xss_result
+            })
+            
+            # Log the detection
+            log_detection(
+                method="FILE_UPLOAD",
+                query=query,
+                sql_features=sf,
+                sql_prediction=sqlp,
+                xss_features=xf,
+                xss_prediction=xssp,
+                sql_result=sql_result,
+                xss_result=xss_result
+            )
+            
+        except Exception as e:
+            results.append({
+                'query': query,
+                'error': str(e)
+            })
+            log_detection(
+                method="FILE_UPLOAD",
+                query=query,
+                sql_features=None,
+                sql_prediction=None,
+                xss_features=None,
+                xss_prediction=None,
+                sql_result="Error",
+                xss_result="Error",
+                error=str(e)
+            )
+            return jsonify({
+                'progress': 100,
+                'message': 'Error occurred',
+                'results': results,
+                'stats': {
+                    'total_queries': len(queries),
+                    'processing_time': str(datetime.datetime.now() - start_time),
+                    'sql_detected': sql_detected,
+                    'xss_detected': xss_detected
+                }
+            })
+
+    # Final response
+    processing_time = datetime.datetime.now() - start_time
+    return jsonify({
+        'progress': 100,
+        'message': 'Analysis complete',
+        'results': results,
+        'stats': {
+            'total_queries': len(queries),
+            'processing_time': str(processing_time),
+            'sql_detected': sql_detected,
+            'xss_detected': xss_detected
+        }
+    })
+
 @app.route('/detect', methods=['GET', 'POST'])
+@limiter.limit("10 per minute") if LIMITER_AVAILABLE else lambda f: f
 def detect():
     try:
         method = request.method
-        if method == 'POST':
-            input_data = request.form.get('query', '') or request.form.get('cfile', '')
-        else:
-            input_data = request.args.get('query', '')
-        if not input_data:
-            raise ValueError("No input query provided")
+        raw = request.form.get('query') if method == 'POST' else request.args.get('query', '')
+        if not raw:
+            return jsonify(error="No query provided"), 400
+            
+        dec = unquote_plus(raw)
+        sf = extract_sql_features(dec)
+        xf = getVec([dec])[0]
+        sqlp = sql_model.predict(sql_scaler.transform([sf]))[0] if sum(sf) > 0 else 0
+        xssp = xss_model.predict([xf])[0]
         
-        try:
-            decoded_data = unquote_plus(input_data)
-        except Exception as e:
-            decoded_data = input_data
-            print(f"Decoding error: {e}")
+        sql_result = "SQL Injection Detected" if sqlp else "No SQL Injection"
+        xss_result = "XSS Detected" if xssp else "No XSS"
         
-        # SQL Injection Detection
-                # SQL Injection Detection
-        sql_features = extract_sql_features(decoded_data)
-        if len(sql_features) != 6:
-            raise ValueError(f"SQL features invalid: {len(sql_features)} features, expected 6")
+        log_detection(
+            method=method,
+            query=raw,
+            sql_features=sf,
+            sql_prediction=sqlp,
+            xss_features=xf,
+            xss_prediction=xssp,
+            sql_result=sql_result,
+            xss_result=xss_result
+        )
         
-        # ✅ Fix false positives: Skip prediction if all features are zero
-        if sum(sql_features) == 0:
-            sql_result = "No SQL Injection"
-            sql_prediction = 0
-        else:
-            sql_features_scaled = sql_scaler.transform([sql_features])
-            sql_prediction = sql_model.predict(sql_features_scaled)[0]
-            sql_result = "SQL Injection Detected" if sql_prediction == 1 else "No SQL Injection"
-        # XSS Detection
-        xss_features = getVec([decoded_data])
-        if len(xss_features[0]) != 26:
-            raise ValueError(f"XSS features invalid: {len(xss_features[0])} features, expected 26")
-        xss_prediction = xss_model.predict(xss_features)[0]
-        xss_result = "XSS Detected" if xss_prediction == 1 else "No XSS"
-        # Log the request with detailed debug info
-        log_entry = f"Request Method: {method}\nInput Query: {input_data}\nSQL Features: {sql_features}\nSQL Prediction: {sql_prediction}\nXSS Features: {xss_features[0]}\nXSS Prediction: {xss_prediction}\nSQL Result: {sql_result}\nXSS Result: {xss_result}\n\n"
-        with open("detection_log.txt", "a") as f:
-            f.write(log_entry)
-        return jsonify({"sql_injection": sql_result, "xss": xss_result})
+        return jsonify(
+            sql_injection=sql_result,
+            xss=xss_result
+        )
+        
     except Exception as e:
-        error_msg = f"Error during detection: {str(e)}"
-        log_entry = f"Request Method: {method}\nInput Query: {input_data}\nError: {error_msg}\n\n"
-        with open("detection_log.txt", "a") as f:
-            f.write(log_entry)
-        return jsonify({"sql_injection": error_msg, "xss": error_msg}), 500
-# Handle favicon to avoid 404 errors
+        error_msg = str(e)
+        log_detection(
+            method=request.method,
+            query=request.form.get('query') if request.method == 'POST' else request.args.get('query', ''),
+            sql_features=None,
+            sql_prediction=None,
+            xss_features=None,
+            xss_prediction=None,
+            sql_result="Error",
+            xss_result="Error",
+            error=error_msg
+        )
+        return jsonify(error=error_msg), 500
+
+@app.route('/ai-threats', methods=['POST'])
+@limiter.limit("5 per minute") if LIMITER_AVAILABLE else lambda f: f
+def ai_threats():
+    query = request.json.get('query', '').strip()
+    if not query:
+        return jsonify(error="Missing query input"), 400
+
+    # Try Gemini first if available
+    if GEMINI_AVAILABLE and GEMINI_API_KEY:
+        try:
+            prompt = f"""
+Analyze this potentially malicious input: `{query}`
+
+If it resembles SQLi or XSS, list 3-5 specific real-world threats it could cause. 
+Format your response with:
+- [Emoji] Threat description 1
+- [Emoji] Threat description 2
+- [Emoji] Threat description 3
+
+Focus on technical impacts and be concise."""
+            
+            resp = gemini_model.generate_content(
+                contents=prompt,
+                generation_config=GenerationConfig(
+                    temperature=0.3,
+                    top_p=0.9,
+                    max_output_tokens=300
+                )
+            )
+            
+            if hasattr(resp, 'text'):
+                text = resp.text
+            elif hasattr(resp, 'candidates') and resp.candidates:
+                text = resp.candidates[0].content.parts[0].text
+            else:
+                text = ""
+            
+            if text:
+                return jsonify(threats=text.strip())
+        except Exception as ge:
+            print("❌ Gemini error:", ge)
+
+    # Fallback to Hugging Face
+    if HF_API_TOKEN:
+        try:
+            prompt = f"Analyze security threats for: {query}. List 3-5 specific risks with emojis."
+            hf_res = requests.post(
+                "https://api-inference.huggingface.co/models/google/gemma-7b",
+                headers={"Authorization": f"Bearer {HF_API_TOKEN}"},
+                json={
+                    "inputs": prompt,
+                    "parameters": {
+                        "max_length": 300,
+                        "temperature": 0.4,
+                        "return_full_text": False
+                    }
+                },
+                timeout=15
+            )
+            data = hf_res.json()
+            text = data[0]['generated_text'] if isinstance(data, list) else ""
+            if text:
+                return jsonify(threats=text.strip())
+        except Exception as he:
+            print("⚠️ HF fallback error:", he)
+
+    # Final fallback
+    default_threats = """
+- 🔓 Unauthorized database access
+- 🗑️ Data deletion or corruption
+- 📜 Database schema exposure
+- 📊 Sensitive data exfiltration
+- ⚠️ Complete system compromise
+"""
+    return jsonify(threats=default_threats.strip())
+
 @app.route('/favicon.ico')
 def favicon():
     return '', 204
-if __name__ == '__main__':
+
+@app.route('/explain-threat', methods=['POST'])
+def explain_threat():
+    data = request.json
+    question = data.get('question', '').strip()
+    current_threats = data.get('current_threats', '')
+    
+    if not question:
+        return jsonify(error="No question provided"), 400
+    
     try:
-        app.run(host='127.0.0.1', port=5000, debug=True)
+        # Try Gemini first if available
+        if GEMINI_AVAILABLE and GEMINI_API_KEY:
+            prompt = f"""
+You are a cybersecurity expert explaining SQL injection threats to a user.
+The user has seen these potential threats:
+{current_threats}
+
+They are asking: {question}
+
+Provide a detailed but concise explanation (2-3 paragraphs max) in simple terms.
+Include examples if helpful.
+"""
+            resp = gemini_model.generate_content(
+                contents=prompt,
+                generation_config=GenerationConfig(
+                    temperature=0.3,
+                    top_p=0.9,
+                    max_output_tokens=500
+                )
+            )
+            
+            if hasattr(resp, 'text'):
+                text = resp.text
+            elif hasattr(resp, 'candidates') and resp.candidates:
+                text = resp.candidates[0].content.parts[0].text
+            else:
+                text = ""
+            
+            if text:
+                return jsonify(explanation=text.strip())
+        
+        # Fallback to simple explanations
+        explanations = {
+            "data breach": "A data breach occurs when attackers access sensitive information they shouldn't have access to. In SQL injection, this happens when malicious queries extract data from tables containing user credentials, personal information, or other private data.",
+            "command execution": "Some SQL databases allow running system commands through special functions. Attackers can chain these to your vulnerable query to execute any command on your server, potentially taking full control.",
+            "file overwrite": "Certain SQL functions let you write files. Attackers can overwrite critical files like ASP scripts to insert malicious code that gives them persistent access to your system.",
+            "denial of service": "DoS attacks make your database unresponsive. Attackers can craft queries that consume all resources - like endless joins or recursive queries - preventing legitimate users from accessing data."
+        }
+        
+        for term in explanations:
+            if term in question.lower():
+                return jsonify(explanation=explanations[term])
+        
+        return jsonify(explanation="This threat involves potential security risks from the SQL injection. For more details, consult a cybersecurity professional.")
+        
     except Exception as e:
-        print(f"Server error: {e}")
-        exit(1)
+        return jsonify(error=str(e)), 500
+
+if __name__ == "__main__":
+    app.run(debug=True)
