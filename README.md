@@ -1,6 +1,6 @@
 # AI/ML for Networking
 
-Category: Network Security
+Category: Network Security.
 
 Pre-requisites:-
 
