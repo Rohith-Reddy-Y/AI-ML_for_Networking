@@ -41,7 +41,7 @@ Develop a machine learning-based solution to detect and prevent common web appli
 
 1. **Clone the repository:**  
    ```
-   git clone https://github.com/your-username/AI-ML_for_Networking.git
+   git clone https://github.com/Rohith-Reddy-Y/AI-ML_for_Networking.git
    ```
 
 2. **Navigate to the project directory:**  
