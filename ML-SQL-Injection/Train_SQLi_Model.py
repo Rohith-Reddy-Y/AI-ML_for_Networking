@@ -5,7 +5,7 @@ import pandas as pd
 import pickle
 
 # Load dataset
-df = pd.read_csv("Good_and_Bad_requests.csv")
+df = pd.read_csv("Good_and_Bad_requests_1.csv")
 X = df.drop("class", axis=1)
 y = df["class"].apply(lambda x: 1 if x == "bad" else 0)
 

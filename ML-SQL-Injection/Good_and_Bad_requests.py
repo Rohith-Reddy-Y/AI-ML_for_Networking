@@ -85,6 +85,6 @@ print("✅ Good request feature extraction complete.")
 df1 = pd.read_csv("temp_bad_responses.csv")
 df2 = pd.read_csv("temp_good_responses.csv")
 combined = pd.concat([df1, df2], ignore_index=True)
-combined.to_csv("Good_and_Bad_requests.csv", index=False)
+combined.to_csv("Good_and_Bad_requests_1.csv", index=False)
 
-print("✅ Combined dataset saved as Good_and_Bad_requests.csv")
+print("✅ Combined dataset saved as Good_and_Bad_requests_1.csv")
