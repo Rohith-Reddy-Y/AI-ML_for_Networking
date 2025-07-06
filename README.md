@@ -84,7 +84,7 @@ Develop a machine learning-based solution to detect and prevent common web appli
    ```
    python Good_and_Bad_requests.py
    ```
-   ➔ This processes `bad_requests.log` and `good_requests.log` to create `Good_and_Bad_requests.csv`.
+   ➔ This processes `bad_requests.log` and `good_requests.log` to create `Good_and_Bad_requests_1.csv`.
 
 3. Train the RandomForestClassifier model:
    ```
@@ -101,11 +101,22 @@ Develop a machine learning-based solution to detect and prevent common web appli
    cd ML-XSS
    ```
 
-2. Run the training script:
+2. **Run the training script in Jupyter Notebook:**  
+   Make sure you have Jupyter installed:
    ```
-   python XSS-Doc2Vec-ML-Classifier-checkpoint.ipynb
+   pip install notebook
    ```
-   ➔ This generates `ML-XSS/lib/d2v.model`, `ML-XSS/lib/RandomForestClassifier.sav` along with a few other `.sav` models, but `RandomForestClassifier.sav` gives you the highest accuracy.
+   Then launch the notebook:
+   ```
+   jupyter notebook XSS-Doc2Vec-ML-Classifier-checkpoint.ipynb
+   ```
+   ➔ This will open the notebook in your browser.  
+   ➔ Run all the cells to train the model.
+
+   This generates:
+   - `ML-XSS/lib/d2v.model`
+   - `ML-XSS/lib/RandomForestClassifier.sav` *(best accuracy)*
+   - Other `.sav` models.
 
 ---
 
