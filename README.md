@@ -162,8 +162,6 @@ Develop a machine learning-based solution to detect and prevent common web appli
 
 | Directory           | Description                        | Key Files                                           |
 |---------------------|------------------------------------|-----------------------------------------------------|
-| Attacks_Detection/   | Main application and models        | app.py, templates/index.html, models/*.sav, models/*.pkl |
+| Attacks_Detection/   | Main application and models        | app.py, detection_log.txt, Templates/index.html, Models/*.sav, *.pkl, *.model, Data/*.csv |
 | ML-SQL-Injection/    | SQLi feature extraction and training | Good_and_Bad_requests.py, Train_SQLi_model.py       |
-| ML-XSS/              | XSS detection and training         | ml_xss.py, XSS-Doc2Vec-ML-Classifier-checkpoint.ipynb |
-| data/                | Datasets for training/testing      | Good_and_Bad_requests.csv, httplog.csv, testXSS.txt, testNORM.txt |
-| docs/                | Documentation                     | README.md, Project_Report.tex, Proposed Architecture Diagram.docx |
+| ML-XSS/              | XSS detection and training         | ML-XSS_Model_Testing.py, .ipynb_checkpoints/XSS-Doc2Vec-ML-Classifier-checkpoint.ipynb, lib/*.sav, *.txt |
