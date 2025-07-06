@@ -1,711 +1,105 @@
-# AI/ML for Networking
+AI-ML_for_Networking
 
-Category: Network Security
+Project Description
+This project implements an AI-driven solution for detecting SQL Injection (SQLi) and Cross-Site Scripting (XSS) attacks in network traffic using machine learning. It features a web interface for real-time threat detection, file upload analysis (CSV, PDF, DOCX, TXT), and detailed logging. The system uses pre-trained models (RandomForestClassifier, Doc2Vec) and integrates a Web Application Firewall (WAF) concept for enhanced security.
+Prerequisites
 
-Pre-requisites:-
+Python 3.9 or higher
+Git for cloning the repository
+Linux environment (recommended for compatibility)
+Optional: Google API Key and Hugging Face API Token for AI threat analysis
 
-Computer Systems Basics – CPU/Memory/Storage/NIC
-Good Hands-on Experience on Linux..
-Programming Skills in Python and/or C./\
-Basics of AI/ML...
- 
-
-Problem Statement
-
- 
-
-Description:-
-
-Modern networks face increasing challenges in monitoring and securing traffic due to the exponential growth of data, encrypted communication, and sophisticated cyber threats. Traditional rule-based security measures and deep packet inspection (DPI) techniques are becoming less effective in detecting and classifying threats, especially in encrypted traffic. Manual intervention in network traffic classification is inefficient, leading to delayed threat detection and security vulnerabilities. To address these issues, AI-driven solutions can analyze traffic patterns, detect anomalies, classify applications, and enhance security in real-time, ensuring adaptive and intelligent network defense.
+Installation
 
- 
+Clone the repository:git clone https://github.com/your-username/AI-ML_for_Networking.git
 
-Expected Outcome:
 
-Automated Network Traffic Analysis using AI/ML models to detect and classify traffic in real time..
-Improved Threat Detection & Security, identifying anomalies, malware, and encrypted attacks with higher accuracy.
-Reduced False Positives & False Negatives, enhancing the efficiency of network security operations.
-Scalability & Performance Optimization, ensuring AI models can handle high-traffic environments with minimal latency.
-Privacy-Preserving Traffic Analysis, leveraging AI for encrypted traffic analysis without decryption.
- 
+Navigate to the project directory:cd AI-ML_for_Networking
 
-Deliverables:
 
-AI-Powered Traffic Classification Model – A system that categorizes network traffic (e.g., APP ID detection) based on behavior and patterns.
-Threat Detection & Anomaly Identification Framework – AI-driven security mechanism to detect suspicious or malicious activity.
+Create a virtual environment:python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
 
 
-
-# AI-Powered Web Attack Detection System
+Install dependencies:pip install -r requirements.txt
 
-## 🚀 Project Overview
 
-This project implements an **AI-powered Web Application Firewall (WAF)** that detects and blocks web attacks in real time. Specifically, it covers:
+Create a .env file in the Attacks_Detection directory with API keys (optional):GOOGLE_API_KEY=your_google_api_key
+HF_API_TOKEN=your_hf_api_token
 
-* **SQL Injection (SQLi)**
-* **Cross-Site Scripting (XSS)**
-* **Remote Code Execution (RCE)**
 
-The system integrates:
-
-1. **Machine Learning (Random Forest)** for SQLi detection.
-2. **Deep Learning (Doc2Vec + Random Forest)** for XSS detection.
-3. **Rule-based & ML/regex hybrid** for RCE detection.
-4. **ModSecurity** as the WAF engine, embedded in NGINX.
-5. **Flask (Python)** as the backend web application.
-6. **Docker + Docker Compose** for containerization.
 
-When a malicious payload is detected, ModSecurity returns **HTTP 403 Forbidden**, and the log includes AI detection details.
+Training the Models
+SQL Injection Model
 
----
+Navigate to the ML-SQL-Injection directory:cd ML-SQL-Injection
 
-## 🧰 Technologies Used
 
-| Layer                | Technology                                               |
-| -------------------- | -------------------------------------------------------- |
-| Web Server           | Flask (Python)                                           |
-| WAF Engine           | NGINX + ModSecurity                                      |
-| SQLi Detection       | Random Forest (scikit-learn)                             |
-| XSS Detection        | Doc2Vec (gensim) + Random Forest (scikit-learn)          |
-| RCE Detection        | Regex & simple feature checks + (optional ML classifier) |
-| AI Engine Simulation | TADK (Threat AI Detection Kit) – simulated via script    |
-| Deployment           | Docker + Docker Compose                                  |
-| Testing Tools        | `curl`, `wrk`                                            |
+Run the log parser to generate the dataset:python log_parser.py
 
----
+This processes bad_requests.log and good_requests.log to create data/demo_good_and_bad_requests.csv.
+Train the RandomForestClassifier model:python train_sqli_model.py
 
-## 📁 File Structure
-
-```
-web-attack-detection/
-├── docker-compose.yml
-├── README.md                   # This documentation
-├── webapp/
-│   ├── Dockerfile
-│   └── app.py                  # Simple Flask web app
-├── SQLi-Detection/
-│   ├── bad_requests.log        # Sample malicious SQLi requests
-│   ├── good_requests.log       # Sample benign requests
-│   ├── log_parser.py           # Extract features & generate CSVs
-│   ├── demo_bad_responses.csv  # Generated by log_parser.py
-│   ├── demo_good_responses.csv # Generated by log_parser.py
-│   ├── train_sqli.py           # Train or load Random Forest model
-│   └── sqli_model.pkl          # Saved Random Forest model
-├── XSS-Detection/
-│   ├── lib/
-│   │   ├── d2v.model           # Pre-trained Doc2Vec model
-│   │   ├── DecisionTreeClassifier.sav
-│   │   ├── SVC.sav
-│   │   ├── GaussianNB.sav
-│   │   ├── KNeighborsClassifier.sav
-│   │   ├── RandomForestClassifier.sav
-│   │   └── MLPClassifier.sav   # Pre-trained XSS classifier models
-│   ├── ml_xss.py               # Script to classify XSS
-│   └── test.txt                # Sample inputs for XSS detection
-├── RCE-Detection/
-│   └── detect_rce.py           # Script to detect RCE payloads
-├── nginx/
-│   ├── nginx.conf              # NGINX config enabling ModSecurity
-│   └── modsec/
-│       ├── modsecurity.conf    # ModSecurity rules for SQLi, XSS, RCE
-│       └── crs/                # (Optional) OWASP CRS if used
-└── tadk/
-    └── switch_model.sh         # Simulates TADK AI loading
-```
-
----
+This saves the model to Attacks_Detection/models/sqli_model.pkl.
 
-## 🔧 Setup Instructions
+XSS Model
 
-### 1. Prerequisites
+Navigate to the ML-XSS directory:cd ML-XSS
 
-Ensure the following are installed:
-
-* **Git**
-* **Docker** (≥ 20.10)
-* **Docker Compose** (≥ 1.29)
-* **Python 3.8+** (for local model training/testing)
-* `curl` (for manual testing)
-* `wrk` (optional, for benchmarking)
 
-### 2. Clone the Repository
+Run the training script (converted from the notebook):python XSS-Doc2Vec-ML-Classifier.py
 
-```bash
-cd ~/projects
-git clone https://github.com/yourusername/web-attack-detection.git
-cd web-attack-detection
-```
+This generates Attacks_Detection/models/d2v.model and Attacks_Detection/models/RandomForestClassifier.sav.
 
-### 3. Prepare SQLi Detection
+Running the Application
 
-#### 3.1 Install Dependencies and Parse Logs
+Activate the virtual environment:source venv/bin/activate  # On Windows: venv\Scripts\activate
 
-```bash
-cd SQLi-Detection
-python3 -m venv venv
-source venv/bin/activate
-pip install pandas numpy scikit-learn
-python log_parser.py   # Generates demo_good_responses.csv & demo_bad_responses.csv
-```
 
-#### 3.2 Train or Load the Model
+Navigate to the Attacks_Detection directory:cd Attacks_Detection
 
-If `sqli_model.pkl` already exists, skip to next step. Otherwise:
 
-```bash
-python train_sqli.py   # Trains Random Forest & saves sqli_model.pkl
-```
+Run the main application:python app.py
 
-Deactivate:
 
-```bash
-deactivate
-cd ..
-```
+Access the web interface at http://localhost:5000.
+Use the interface to:
+Enter a query for real-time SQLi/XSS detection.
+Upload a file (CSV, PDF, DOCX, TXT) for batch analysis.
 
-### 4. Prepare XSS Detection
 
-```bash
-cd XSS-Detection
-python3 -m venv venv
-source venv/bin/activate
-pip install gensim scikit-learn numpy nltk
-python - <<EOF
-import nltk
-nltk.download('punkt')
-nltk.download('stopwords')
-EOF
-python ml_xss.py test.txt   # Verify XSS detection works
-```
 
-Deactivate:
+Key Components
 
-```bash
-deactivate
-cd ..
-```
 
-### 5. Prepare RCE Detection
 
-No training needed (regex-based). Just ensure `RCE-Detection/detect_rce.py` exists and is executable:
+Directory
+Description
+Key Files
 
-```bash
-cd RCE-Detection
-chmod +x detect_rce.py
-cd ..
-```
 
-### 6. Create the Flask Web App
 
-```bash
-cd webapp
-# Create app.py and Dockerfile as shown below
-# (See sections 8.1 and 8.2 for contents)
-cd ..
-```
+Attacks_Detection/
+Main application and models
+app.py, templates/index.html, models/d2v.model, models/RandomForestClassifier.sav, models/sqli_model.pkl
 
-### 7. Configure NGINX + ModSecurity
 
-Ensure `nginx/nginx.conf` and `nginx/modsec/modsecurity.conf` exist with:
+ML-SQL-Injection/
+SQLi feature extraction and training
+log_parser.py, train_sqli_model.py
 
-* SQLi rule invoking `detect_sqli.py`
-* XSS rule invoking `detect_xss.py`
-* RCE rule invoking `detect_rce.py`
 
-(See sections 8.6 and 8.7 for exact contents.)
+ML-XSS/
+XSS detection and training
+ml_xss.py, XSS-Doc2Vec-ML-Classifier.py
 
-### 8. Simulate TADK AI Engine
 
-```bash
-cd tadk
-ton chmod +x switch_model.sh
-deactivate
-cd ..
-```
+data/
+Datasets for training and testing
+demo_good_and_bad_requests.csv, httplog.csv, testXSS.txt, testNORM.txt
 
-### 9. Finalize Docker Compose
 
-Ensure `docker-compose.yml` mounts:
+docs/
+Documentation
+README.md, Project_Report.tex, Proposed Architecture Diagram.docx
 
-* `webapp/` (builds Flask)
-* `nginx/nginx.conf` and `nginx/modsec/` (ModSecurity rules)
-* Scripts: `detect_sqli.py`, `detect_xss.py`, `RCE-Detection/detect_rce.py`
-* Models: `SQLi-Detection/sqli_model.pkl`, `XSS-Detection/lib/`
-* TADK simulation: `tadk/switch_model.sh`
-
-(See section 8.9 for exact contents.)
-
----
-
-## ▶️ 10. Build & Run All Services
-
-From project root:
-
-```bash
-docker-compose up --build
-```
-
-Wait until logs indicate:
-
-```txt
-wadetect    | Using device: CPU
-wadetect    | TADK AI Model Loaded - Simulating Deep Learning detection
-wadetect    | ... starting nginx ...
-flask-app   | * Running on http://0.0.0.0:5000/
-```
-
-### 10.1 Test in Another Terminal
-
-```bash
-# 1) Benign GET
-curl http://localhost:8005/
-
-# 2) Benign POST
-curl -X POST -d "username=alice&password=hello123" http://localhost:8005/
-
-# 3) SQLi Attack (should be 403)
-curl -X POST -d "username=admin&password=' OR 1=1--" http://localhost:8005/
-
-# 4) XSS Attack (should be 403)
-curl -X POST -d "comment=<script>alert('XSS')</script>" http://localhost:8005/
-
-# 5) RCE Attack (should be 403)
-curl -X POST -d "cmd=cat /etc/passwd" http://localhost:8005/
-```
-
-In the `wadetect` container logs, watch for lines like:
-
-```txt
-ModSecurity: Warning. detected SQLi using TADK. [data ...]
-ModSecurity: Access denied with code 403 (phase 2). detected SQLi using TADK.
-ModSecurity: Warning. detected XSS using TADK. [data ...]
-ModSecurity: Access denied with code 403 (phase 2). detected XSS using TADK.
-ModSecurity: Warning. detected RCE using TADK. [data ...]
-ModSecurity: Access denied with code 403 (phase 2). detected RCE using TADK.
-```
-
-### 10.2 Optional Benchmarking
-
-```bash
-wrk -t5 -c10 -d10s http://localhost:8005/
-```
-
----
-
-## ✨ 11. How RCE Detection Works
-
-**`detect_rce.py`** reads the entire ARGS string (from STDIN) and applies:
-
-1. **Regex patterns** that match shell metacharacters or known OS commands:
-
-   * `;`, `|`, `&&`, `` `…` ``, `$(…)`
-   * Keywords: `cat `, `ls `, `wget `, `curl `, `rm `, `nc `, `bash `, `sh `
-   * Attempts to open sensitive files (e.g. `/etc/passwd`, `/var/www/html/shell.php`)
-2. **Feature checks**: counts of backticks, semicolons, pipes, etc.
-3. If any pattern matches or feature threshold is exceeded, exit code **1** (block). Else, exit code **0** (allow).
-
-Example regex snippet inside `detect_rce.py`:
-
-```python
-import re, sys
-arg_string = sys.stdin.read().lower()
-# Simple patterns
-patterns = [r"\;", r"\|", r"&&", r"`.+`", r"\$\(.+\)", r"/(etc|var)/passwd", r"\bcurl ", r"\bwget ", r"\bcat ", r"\brm ", r"\bnc ", r"\bbash \"]
-for pat in patterns:
-    if re.search(pat, arg_string):
-        sys.exit(1)
-sys.exit(0)
-```
-
-Insert this logic into your `detect_rce.py` (see section 8.10).
-
----
-
-## 📄 12. Full File Contents
-
-To avoid confusion, here are the complete contents of every file mentioned above. Copy each into its respective location.
-
-### 12.1 `webapp/app.py`
-
-```python
-from flask import Flask, request
-
-app = Flask(__name__)
-
-@app.route('/', methods=['GET', 'POST'])
-def index():
-    if request.method == 'POST':
-        username = request.form.get("username", "")
-        password = request.form.get("password", "")
-        return f"Received: {username} | {password}"
-    return '''
-        <h2>Login Form</h2>
-        <form method="POST">
-            Username: <input name="username"><br>
-            Password: <input name="password"><br>
-            <input type="submit" value="Submit">
-        </form>
-    '''
-
-if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=5000, debug=True)
-```
-
----
-
-### 12.2 `webapp/Dockerfile`
-
-```
-FROM python:3.8-slim
-
-WORKDIR /app
-
-COPY app.py /app/
-RUN pip install flask
-
-EXPOSE 5000
-
-CMD ["python", "app.py"]
-```
-
----
-
-### 12.3 `SQLi-Detection/log_parser.py`
-
-```python
-import pandas as pd
-import re
-
-def parse_log_file(filename, label):
-    rows = []
-    with open(filename, 'r', encoding='utf-8') as f:
-        for line in f:
-            s = line.strip().lower()
-            f1 = s.count("'")
-            f2 = s.count('"')
-            keywords = ['select ', 'union ', 'drop ', '--', 'insert ', 'update ', 'delete ']
-            f3 = sum(s.count(k) for k in keywords)
-            f4 = len(s)
-            f5 = s.count(';')
-            rows.append({'f1': f1, 'f2': f2, 'f3': f3, 'f4': f4, 'f5': f5, 'class': label})
-    return pd.DataFrame(rows)
-
-if __name__ == "__main__":
-    good_df = parse_log_file('good_requests.log', 0)
-    bad_df  = parse_log_file('bad_requests.log', 1)
-    good_df.to_csv('demo_good_responses.csv', index=False)
-    bad_df.to_csv('demo_bad_responses.csv', index=False)
-    print("Generated demo_good_responses.csv and demo_bad_responses.csv")
-```
-
----
-
-### 12.4 `SQLi-Detection/train_sqli.py`
-
-```python
-import pandas as pd
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.model_selection import train_test_split
-import pickle
-
-if __name__ == "__main__":
-    good = pd.read_csv('demo_good_responses.csv')
-    bad  = pd.read_csv('demo_bad_responses.csv')
-    df = pd.concat([good, bad], ignore_index=True)
-    X = df.drop(columns=['class'])
-    y = df['class']
-
-    X_train, X_test, y_train, y_test = train_test_split(
-        X, y, test_size=0.2, stratify=y, random_state=42
-    )
-
-    clf = RandomForestClassifier(n_estimators=100, random_state=42)
-    clf.fit(X_train, y_train)
-
-    acc = clf.score(X_test, y_test)
-    print(f"Random Forest Test Accuracy: {acc * 100:.2f}%")
-
-    pickle.dump(clf, open('sqli_model.pkl', 'wb'))
-    print("Saved model to sqli_model.pkl")
-```
-
----
-
-### 12.5 `XSS-Detection/ml_xss.py`
-
-```python
-import sys
-import re
-import pickle
-import gensim
-
-D2V_PATH    = '/etc/modsec/lib/d2v.model'
-MODEL_PATH  = '/etc/modsec/lib/RandomForestClassifier.sav'
-
-d2v_model = gensim.models.Doc2Vec.load(D2V_PATH)
-clf       = pickle.load(open(MODEL_PATH, 'rb'))
-
-def extract_features(arg_string):
-    tokens = [tok.lower() for tok in re.split(r'\W+', arg_string) if tok]
-    vec = d2v_model.infer_vector(tokens)
-    return vec.reshape(1, -1)
-
-if __name__ == "__main__":
-    arg_string = sys.stdin.read().strip()
-    if not arg_string:
-        sys.exit(0)
-
-    X = extract_features(arg_string)
-    pred = clf.predict(X)[0]
-
-    if pred == 1:
-        sys.exit(1)
-    else:
-        sys.exit(0)
-```
-
----
-
-### 12.6 `RCE-Detection/detect_rce.py`
-
-```python
-#!/usr/bin/env python3
-import sys
-import re
-
-arg_string = sys.stdin.read().lower()
-if not arg_string:
-    sys.exit(0)
-
-# Patterns to catch possible RCE payloads
-patterns = [
-    r";",           # semicolon
-    r"\|",         # pipe
-    r"&&",          # AND operator
-    r"`.+`",       # backticks
-    r"\$\(.+\)", # $( ) command substitution
-    r"/etc/passwd", # reading passwd
-    r"wget ",       # download
-    r"curl ",       # download
-    r"cat ",        # file read
-    r"bash ",       # bash
-    r"sh ",         # shell invocation
-    r"rm ",         # remove files
-    r"nc ",         # netcat
-]
-for pat in patterns:
-    if re.search(pat, arg_string):
-        sys.exit(1)  # Found RCE indicator -> block
-sys.exit(0)  # No match -> allow
-```
-
-Remember to make it executable:
-
-```bash
-chmod +x RCE-Detection/detect_rce.py
-```
-
----
-
-### 12.7 `nginx/nginx.conf`
-
-```nginx
-worker_processes  1;
-events { worker_connections 1024; }
-
-http {
-    include       mime.types;
-    default_type  application/octet-stream;
-
-    modsecurity           on;
-    modsecurity_rules_file /etc/nginx/modsec/modsecurity.conf;
-
-    server {
-        listen 80;
-        server_name localhost;
-
-        location / {
-            proxy_pass         http://web:5000;
-            proxy_set_header   Host $host;
-            proxy_set_header   X-Real-IP $remote_addr;
-            proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
-        }
-    }
-}
-```
-
----
-
-### 12.8 `nginx/modsec/modsecurity.conf`
-
-```bash
-SecRuleEngine On
-SecRequestBodyAccess On
-SecResponseBodyAccess Off
-
-# SQL Injection detection
-SecRule ARGS "@detectSQLi" \
-    "id:1001,phase:2,deny,status:403, \
-     log,msg:'SQLi Detected', \
-     exec:/usr/local/bin/detect_sqli.py"
-
-# XSS detection
-SecRule ARGS "@detectXSS" \
-    "id:1002,phase:2,deny,status:403, \
-     log,msg:'XSS Detected', \
-     exec:/usr/local/bin/detect_xss.py"
-
-# RCE detection
-SecRule ARGS "@detectRCE" \
-    "id:1003,phase:2,deny,status:403, \
-     log,msg:'RCE Detected', \
-     exec:/usr/local/bin/detect_rce.py"
-```
-
----
-
-### 12.9 `tadk/switch_model.sh`
-
-```bash
-#!/bin/bash
-echo "Using device: CPU"
-echo "TADK AI Model Loaded - Simulating Deep Learning detection"
-```
-
-Make it executable:
-
-```bash
-chmod +x tadk/switch_model.sh
-```
-
----
-
-### 12.10 `docker-compose.yml`
-
-```yaml
-version: '3.8'
-
-services:
-  web:
-    build: ./webapp
-    container_name: flask-app
-
-  wadetect:
-    image: nginx:1.26
-    container_name: tadk-waf
-    depends_on:
-      - web
-    ports:
-      - "8005:80"
-    volumes:
-      # NGINX config
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-      # ModSecurity rules
-      - ./nginx/modsec/:/etc/nginx/modsec/:ro
-      # SQLi detection script
-      - ./detect_sqli.py:/usr/local/bin/detect_sqli.py:ro
-      # XSS detection script
-      - ./detect_xss.py:/usr/local/bin/detect_xss.py:ro
-      # RCE detection script
-      - ./RCE-Detection/detect_rce.py:/usr/local/bin/detect_rce.py:ro
-      # SQLi model
-      - ./SQLi-Detection/sqli_model.pkl:/etc/modsec/sqli_model.pkl:ro
-      # XSS Doc2Vec + classifiers
-      - ./XSS-Detection/lib/:/etc/modsec/lib/:ro
-      # TADK simulation
-      - ./tadk/switch_model.sh:/tadk/switch_model.sh:ro
-    command: ["/bin/bash", "-c", "/tadk/switch_model.sh && nginx -g 'daemon off;'" ]
-```
-
----
-
-## 🚀 13. Build & Run All Services
-
-At project root:
-
-```bash
-docker-compose up --build
-```
-
-Check logs until you see:
-
-```txt
-wadetect    | Using device: CPU
-wadetect    | TADK AI Model Loaded - Simulating Deep Learning detection
-wadetect    | ... starting nginx ...
-flask-app   | * Running on http://0.0.0.0:5000/
-```
-
-Now the WAF listens on **[http://localhost:8005/](http://localhost:8005/)**.
-
-### 13.1 Test in Another Terminal
-
-```bash
-# 1) Benign GET
-curl http://localhost:8005/
-
-# 2) Benign POST
-curl -X POST -d "username=alice&password=hello123" http://localhost:8005/
-
-# 3) SQLi Attack
-curl -X POST -d "username=admin&password=' OR 1=1--" http://localhost:8005/
-
-# 4) XSS Attack
-curl -X POST -d "comment=<script>alert('XSS')</script>" http://localhost:8005/
-
-# 5) RCE Attack
-curl -X POST -d "cmd=cat /etc/passwd" http://localhost:8005/
-```
-
-Expected: Requests 3, 4, 5 return **403 Forbidden**, and `wadetect` logs show detection details.
-
-### 13.2 Optional Benchmarking
-
-```bash
-wrk -t5 -c10 -d10s http://localhost:8005/
-```
-
----
-
-## 📊 14. How Detection Works
-
-1. **Client** → **NGINX (wadetect)** on port 8005.
-2. ModSecurity loads `modsecurity.conf` rules (SQLi, XSS, RCE).
-3. For each request, ModSecurity runs three scripts:
-
-   * `detect_sqli.py` (exit 1 = block, 0 = allow)
-   * `detect_xss.py` (exit 1 = block, 0 = allow)
-   * `detect_rce.py` (exit 1 = block, 0 = allow)
-4. If any script exits 1, ModSecurity returns **HTTP 403 Forbidden**.
-5. If all exit 0, NGINX proxies the request to **Flask (web:5000)**.
-6. Flask returns the requested response (login form or posted data).
-
----
-
-## 🎯 15. Future Improvements
-
-* Replace faked TADK script with a **real AI inference service** (Flask/FastAPI) using **OpenVINO or TensorFlow** with URLNet or other advanced models.
-* Add **HTTPS** (certificates via Let’s Encrypt).
-* Integrate with **ELK Stack** (Filebeat → Logstash → Kibana) for log visualization.
-* Expand attack coverage: **CSRF**, **LFI**, **SSRF**, etc.
-* Implement **rate limiting** and **IP reputation** checks in ModSecurity rules.
-
----
-
-## 📄 16. References
-
-* [SQL-Injection-Detection by saptajitbanerjee](https://github.com/saptajitbanerjee/SQL-Injection-Detection)
-* [ML-XSS-Detection by obarrera](https://github.com/obarrera/ML-XSS-Detection)
-* [URLNet Paper](https://arxiv.org/abs/1802.03162)
-* [ModSecurity Core Rule Set (CRS)](https://coreruleset.org/)
-* [wrk HTTP Benchmarking Tool](https://github.com/wg/wrk)
-
----
-
-## 🙌 17. Contributors & Maintainer
-
-**CyGeek**
-B.Tech CSE – Cyber Security
-Gitam University, Bangalore Campus
-
-Pull requests and issues welcome!

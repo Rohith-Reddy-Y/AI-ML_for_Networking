@@ -1,0 +1,358 @@
+🛡️ Real-Time SQLi & XSS Detection
+Request Method: FILE_UPLOAD
+Input Query: http://mysite.net/services?search=%3Cinput%20autofocus%20onfocus=alert(1)%3E
+SQL Injection: No SQL Injection
+XSS: XSS Detected
+
+Timestamp: 2025-07-06 15:49:58
+SQL Features: [0, 0, 0, 0, 0, 0]
+SQL Prediction: 0
+XSS Features: [-1.14144012e-01  4.81402799e-02 -1.41861230e-01  1.86156377e-01
+ -1.15448929e-01 -8.28252956e-02  1.29296914e-01  1.86800197e-01
+  1.77487865e-01 -7.20477104e-02  1.01139233e-01 -4.57757153e-02
+ -2.90966213e-01 -3.58417816e-02  1.35466814e-01  8.65607709e-02
+  1.38755701e-02  1.03875250e-01 -9.73850191e-02  6.53289035e-02
+  0.00000000e+00  1.00000000e+00  0.00000000e+00  0.00000000e+00
+  6.80000000e+01  0.00000000e+00]
+XSS Prediction: 1
+
+================================================================================
+
+🛡️ Real-Time SQLi & XSS Detection
+Request Method: FILE_UPLOAD
+Input Query: htt+A1p://example.net/contact?search=%3Cimg%20src=x%20onerror=alert(%27XSS%27)%3E
+SQL Injection: SQL Injection Detected
+XSS: XSS Detected
+
+Timestamp: 2025-07-06 15:49:58
+SQL Features: [1, 0, 0, 1, 3, 0]
+SQL Prediction: 1
+XSS Features: [ 1.66709460e-02  8.14158767e-02 -4.71695699e-03 -9.18976292e-02
+  1.47626564e-01 -1.45794630e-01  3.74581963e-02  1.48083866e-01
+  1.15856864e-01  2.57337987e-02  2.04340704e-02  1.00728929e-01
+ -4.50476259e-02  5.81392683e-02  9.27362368e-02  2.74310894e-02
+  1.31164625e-01  1.39332414e-01  4.64313179e-02 -4.03185450e-02
+  1.00000000e+00  1.00000000e+00  0.00000000e+00  0.00000000e+00
+  6.90000000e+01  0.00000000e+00]
+XSS Prediction: 1
+
+================================================================================
+
+🛡️ Real-Time SQLi & XSS Detection
+Request Method: FILE_UPLOAD
+Input Query: http://safe.com/products?id=1%20UNION%20SELECT%20username,password%20FROM%20users%2D%2D
+SQL Injection: SQL Injection Detected
+XSS: No XSS
+
+Timestamp: 2025-07-06 15:49:58
+SQL Features: [0, 0, 1, 0, 5, 2]
+SQL Prediction: 1
+XSS Features: [ 0.00536974 -0.03092365  0.22690676  0.01606271 -0.05054436  0.08435597
+ -0.0443221   0.18290891 -0.00087304  0.00978553  0.12666649 -0.05547972
+ -0.07154874  0.09051598  0.16106729  0.16123079  0.14612724 -0.02485529
+ -0.07035693  0.07344425  0.          0.          0.          0.
+  0.          0.        ]
+XSS Prediction: 0
+
+================================================================================
+
+🛡️ Real-Time SQLi & XSS Detection
+Request Method: FILE_UPLOAD
+Input Query: http://safe.com/products?search=%3Cdiv%20style=%27xss:expression(alert(1))%27%3E
+SQL Injection: No SQL Injection
+XSS: XSS Detected
+
+Timestamp: 2025-07-06 15:49:58
+SQL Features: [0, 0, 0, 0, 0, 0]
+SQL Prediction: 0
+XSS Features: [-1.21793196e-01 -5.74322790e-02  3.51008326e-02  1.18574068e-01
+  6.66452274e-02  5.18276952e-02 -2.40863301e-04  2.44074807e-01
+  1.82368830e-01  6.93929940e-03  2.51387432e-03 -8.57633948e-02
+ -2.52679765e-01  3.14438343e-02  2.48835489e-01  2.39120666e-02
+ -8.93786550e-04  1.29161805e-01  7.28870481e-02  9.64879394e-02
+  0.00000000e+00  1.00000000e+00  0.00000000e+00  0.00000000e+00
+  7.00000000e+01  0.00000000e+00]
+XSS Prediction: 1
+
+================================================================================
+
+🛡️ Real-Time SQLi & XSS Detection
+Request Method: FILE_UPLOAD
+Input Query: http://mysite.com/dashboard
+SQL Injection: No SQL Injection
+XSS: No XSS
+
+Timestamp: 2025-07-06 15:49:58
+SQL Features: [0, 0, 0, 0, 0, 0]
+SQL Prediction: 0
+XSS Features: [ 0.01941121 -0.01988402  0.08585099  0.0659332  -0.03387167  0.01311561
+ -0.04872268  0.11015957  0.02134785 -0.02462174  0.01609257 -0.0318119
+ -0.08607633 -0.02503091  0.07297671  0.04751014  0.09246093 -0.03465698
+ -0.04282986  0.0573049   0.          0.          0.          0.
+  0.          0.        ]
+XSS Prediction: 0
+
+================================================================================
+
+🛡️ Real-Time SQLi & XSS Detection
+Request Method: FILE_UPLOAD
+Input Query: http://example.com/home?id=2%20UNION%20ALL%20SELECT%20NULL,NULL,NULL%2D%2D
+SQL Injection: SQL Injection Detected
+XSS: No XSS
+
+Timestamp: 2025-07-06 15:49:58
+SQL Features: [0, 0, 1, 0, 4, 2]
+SQL Prediction: 1
+XSS Features: [-0.0489494  -0.04304303  0.14098728  0.07593272  0.0670153   0.00838077
+ -0.02627416 -0.1071946  -0.03680687 -0.02762746 -0.01592403 -0.01246062
+  0.04171535  0.03258185 -0.08945981 -0.00177143 -0.17097202 -0.01412295
+ -0.01883159 -0.02718147  0.          0.          0.          0.
+  0.          0.        ]
+XSS Prediction: 0
+
+================================================================================
+
+🛡️ Real-Time SQLi & XSS Detection
+Request Method: FILE_UPLOAD
+Input Query: http://mysite.com/dashboard?search=%3Cscript%3Ealert(1)%3C/script%3E
+SQL Injection: No SQL Injection
+XSS: XSS Detected
+
+Timestamp: 2025-07-06 15:49:58
+SQL Features: [0, 0, 0, 0, 0, 0]
+SQL Prediction: 0
+XSS Features: [-1.80871561e-01 -5.75676002e-02 -6.81139342e-03  1.43610850e-01
+  2.10063726e-01 -1.48025649e-02 -1.91882215e-02  1.68376207e-01
+  1.19545780e-01 -8.72072279e-02 -2.18812630e-01  1.29726101e-02
+ -1.88252121e-01 -1.59938689e-02  1.70388982e-01 -1.50250448e-02
+ -2.92261504e-02  2.59453326e-01  1.49218142e-01  1.98793486e-01
+  3.00000000e+00  1.00000000e+00  0.00000000e+00  0.00000000e+00
+  6.00000000e+01  4.00000000e+00]
+XSS Prediction: 1
+
+================================================================================
+
+🛡️ Real-Time SQLi & XSS Detection
+Request Method: FILE_UPLOAD
+Input Query: http://example.net/contact
+SQL Injection: No SQL Injection
+XSS: No XSS
+
+Timestamp: 2025-07-06 15:49:58
+SQL Features: [0, 0, 0, 0, 0, 0]
+SQL Prediction: 0
+XSS Features: [ 0.03384551  0.01523012  0.10701633  0.02814857  0.01275076  0.02832705
+  0.00653494  0.13440259 -0.07076475 -0.01215243  0.0430538  -0.04417654
+ -0.04049421 -0.0406964   0.05643361  0.03545573  0.14420831 -0.00869041
+ -0.05197479  0.02329034  0.          0.          0.          0.
+  0.          0.        ]
+XSS Prediction: 0
+
+================================================================================
+
+🛡️ Real-Time SQLi & XSS Detection
+Request Method: FILE_UPLOAD
+Input Query: http://website.com/info?id=%27%20OR%20%27a%27=%27a
+SQL Injection: SQL Injection Detected
+XSS: No XSS
+
+Timestamp: 2025-07-06 15:49:58
+SQL Features: [4, 0, 0, 0, 2, 0]
+SQL Prediction: 1
+XSS Features: [ 0.04109827 -0.02002102 -0.06855761 -0.12266607  0.1045248  -0.09080832
+  0.00265598  0.01658211  0.20535035  0.00726668 -0.14852007  0.11284458
+ -0.06960631  0.0839574  -0.04594355 -0.0437923   0.15905069  0.10768911
+  0.05794245  0.13675588  0.          0.          0.          0.
+  0.          0.        ]
+XSS Prediction: 0
+
+================================================================================
+
+🛡️ Real-Time SQLi & XSS Detection
+Request Method: FILE_UPLOAD
+Input Query: http://testsite.com/blog
+SQL Injection: No SQL Injection
+XSS: No XSS
+
+Timestamp: 2025-07-06 15:49:58
+SQL Features: [0, 0, 0, 0, 0, 0]
+SQL Prediction: 0
+XSS Features: [ 0.03273089  0.0334755   0.18537684  0.08741341 -0.01806103  0.02604023
+ -0.02723735  0.22877379 -0.00163352  0.00160362  0.07698386 -0.04134466
+ -0.08108115 -0.0112108   0.10767338  0.00835557  0.18222675 -0.04990555
+ -0.04843923  0.04420231  0.          0.          0.          0.
+  0.          0.        ]
+XSS Prediction: 0
+
+================================================================================
+
+🛡️ Real-Time SQLi & XSS Detection
+Request Method: FILE_UPLOAD
+Input Query: http://example.com/home
+SQL Injection: No SQL Injection
+XSS: No XSS
+
+Timestamp: 2025-07-06 15:49:58
+SQL Features: [0, 0, 0, 0, 0, 0]
+SQL Prediction: 0
+XSS Features: [-1.27294008e-02  2.05461495e-02  2.06409484e-01  5.86481243e-02
+ -1.42047340e-02  3.32768187e-02  1.80248637e-04  2.35883802e-01
+ -2.25302093e-02 -6.63219020e-02  6.94700852e-02  2.87972987e-02
+ -6.66246340e-02 -3.24411429e-02  1.39520496e-01  1.98571216e-02
+  1.63726702e-01 -3.48724518e-03 -5.76761104e-02  7.55434260e-02
+  0.00000000e+00  0.00000000e+00  0.00000000e+00  0.00000000e+00
+  0.00000000e+00  0.00000000e+00]
+XSS Prediction: 0
+
+================================================================================
+
+🛡️ Real-Time SQLi & XSS Detection
+Request Method: FILE_UPLOAD
+Input Query: http://safe.com/products
+SQL Injection: No SQL Injection
+XSS: No XSS
+
+Timestamp: 2025-07-06 15:49:58
+SQL Features: [0, 0, 0, 0, 0, 0]
+SQL Prediction: 0
+XSS Features: [ 0.03217699 -0.00722939  0.15076432  0.05686224 -0.06244071  0.02320573
+  0.01765563  0.12089854 -0.01748796 -0.0205709   0.02456057 -0.03389389
+ -0.01300661 -0.00391161  0.08322091  0.02893725  0.0818253  -0.02851727
+ -0.00204304  0.05176258  0.          0.          0.          0.
+  0.          0.        ]
+XSS Prediction: 0
+
+================================================================================
+
+🛡️ Real-Time SQLi & XSS Detection
+Request Method: FILE_UPLOAD
+Input Query: http://mysite.net/services?id=%27%20AND%201=1%20%2D%2D
+SQL Injection: SQL Injection Detected
+XSS: No XSS
+
+Timestamp: 2025-07-06 15:49:58
+SQL Features: [1, 0, 1, 0, 3, 0]
+SQL Prediction: 1
+XSS Features: [-0.03342192 -0.04200358  0.30683836  0.00478545  0.33704093  0.1352067
+  0.07821969 -0.2777932  -0.01615242  0.04979683 -0.1064866   0.02348288
+  0.04039164  0.11845236 -0.05042114 -0.02301053 -0.32909635  0.01754132
+  0.23208795  0.05762358  0.          0.          0.          0.
+  0.          0.        ]
+XSS Prediction: 0
+
+================================================================================
+
+🛡️ Real-Time SQLi & XSS Detection
+Request Method: FILE_UPLOAD
+Input Query: http://testsite.com/blog
+SQL Injection: No SQL Injection
+XSS: No XSS
+
+Timestamp: 2025-07-06 15:49:58
+SQL Features: [0, 0, 0, 0, 0, 0]
+SQL Prediction: 0
+XSS Features: [ 0.00900944 -0.00931673  0.08200259  0.00392736  0.00189502  0.06172095
+ -0.01314222  0.12305049  0.01071277  0.00629642  0.05818558  0.01540898
+  0.00847477 -0.00572946  0.09274313  0.01417602  0.07605837 -0.02250392
+ -0.00714578  0.03642483  0.          0.          0.          0.
+  0.          0.        ]
+XSS Prediction: 0
+
+================================================================================
+
+🛡️ Real-Time SQLi & XSS Detection
+Request Method: FILE_UPLOAD
+Input Query: http://example.org/index?id=%27%20OR%201=1%20%2D%2D
+SQL Injection: SQL Injection Detected
+XSS: No XSS
+
+Timestamp: 2025-07-06 15:49:58
+SQL Features: [1, 0, 1, 0, 3, 0]
+SQL Prediction: 1
+XSS Features: [-0.10157386 -0.10932303  0.25351518  0.01504632  0.22965829  0.11459033
+  0.05728912 -0.21680601  0.002801    0.09299969 -0.02183689 -0.04412401
+  0.11113999  0.07845555 -0.01224903 -0.01453032 -0.28965548 -0.040725
+  0.15923774  0.02842291  0.          0.          0.          0.
+  0.          0.        ]
+XSS Prediction: 0
+
+================================================================================
+
+🛡️ Real-Time SQLi & XSS Detection
+Request Method: FILE_UPLOAD
+Input Query: http://testsite.com/blog
+SQL Injection: No SQL Injection
+XSS: No XSS
+
+Timestamp: 2025-07-06 15:49:58
+SQL Features: [0, 0, 0, 0, 0, 0]
+SQL Prediction: 0
+XSS Features: [ 0.01244765 -0.01474834  0.17560968  0.08703586 -0.00047866  0.03648278
+  0.00251712  0.26533586  0.04785676 -0.00380224  0.09198055 -0.04974471
+ -0.05576672  0.00623885  0.1680616   0.03301701  0.16690947 -0.03168563
+  0.00657696  0.08060098  0.          0.          0.          0.
+  0.          0.        ]
+XSS Prediction: 0
+
+================================================================================
+
+🛡️ Real-Time SQLi & XSS Detection
+Request Method: FILE_UPLOAD
+Input Query: http://example.com/profile?search=%3Cmath%3E%3Cmtext%3E%3C/mtext%3E%3Cscript%3Ealert(1)%3C/script%3E%3C/math%3E
+SQL Injection: No SQL Injection
+XSS: XSS Detected
+
+Timestamp: 2025-07-06 15:49:58
+SQL Features: [0, 0, 0, 0, 0, 0]
+SQL Prediction: 0
+XSS Features: [-1.72023341e-01  1.79644942e-03 -4.99970838e-02  1.14097036e-01
+  1.96182713e-01  4.30186875e-02  1.31716698e-01  6.38586357e-02
+  3.95503305e-02 -8.55288804e-02 -1.87274724e-01  3.90631855e-02
+  2.43596639e-02 -7.53992796e-02  1.36833519e-01 -4.18384559e-02
+ -7.56565556e-02  2.71999896e-01  1.63405299e-01  8.28301832e-02
+  3.00000000e+00  1.00000000e+00  0.00000000e+00  0.00000000e+00
+  8.70000000e+01  1.20000000e+01]
+XSS Prediction: 1
+
+================================================================================
+
+🛡️ Real-Time SQLi & XSS Detection
+Request Method: FILE_UPLOAD
+Input Query: http://example.com/home?id=%27%3B%20EXEC%20xp_cmdshell(%27dir%27)%3B%2D%2D
+SQL Injection: No SQL Injection
+XSS: XSS Detected
+
+Timestamp: 2025-07-06 15:49:58
+SQL Features: [0, 0, 0, 0, 0, 0]
+SQL Prediction: 0
+XSS Features: [ 3.88489813e-02 -1.57023415e-01 -7.67538622e-02 -1.07829593e-01
+  2.43622348e-01 -7.12847263e-02  7.63751194e-02 -3.60380828e-01
+  2.05294490e-01 -1.42992008e-02 -1.93456903e-01  9.82089490e-02
+  2.28989676e-01  1.24526486e-01 -5.49496077e-02 -9.82907861e-02
+ -2.29462519e-01  5.20677306e-03  1.84678882e-01  1.20036617e-01
+  0.00000000e+00  1.00000000e+00  0.00000000e+00  0.00000000e+00
+  5.60000000e+01  0.00000000e+00]
+XSS Prediction: 1
+
+================================================================================
+
+🛡️ Real-Time SQLi & XSS Detection
+Request Method: FILE_UPLOAD
+Input Query: http://example.com/profile?search=%3Cbody%20onload=alert(%27XSS%27)%3E
+SQL Injection: No SQL Injection
+XSS: XSS Detected
+
+Timestamp: 2025-07-06 15:49:58
+SQL Features: [0, 0, 0, 0, 0, 0]
+SQL Prediction: 0
+XSS Features: [ 3.29498053e-02  2.09962651e-01  1.30987793e-01  9.04450193e-04
+  1.65934846e-01 -5.40693998e-02  1.22995656e-02  3.06294501e-01
+  4.22043055e-02 -9.93747860e-02 -5.93088754e-03  9.80116948e-02
+ -2.41292313e-01 -2.13211235e-02  4.41814726e-03 -8.87598842e-04
+  2.03403562e-01  1.90095052e-01 -7.11346194e-02 -6.94541112e-02
+  1.00000000e+00  1.00000000e+00  0.00000000e+00  0.00000000e+00
+  6.00000000e+01  0.00000000e+00]
+XSS Prediction: 1
+
+================================================================================
+
