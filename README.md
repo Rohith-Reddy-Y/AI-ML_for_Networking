@@ -47,7 +47,10 @@ Develop a machine learning-based solution to detect and prevent common web appli
 3. **Create and activate a virtual environment:**  
    ```
    python -m venv venv
-   On Windows: venv\Scripts\activate
+   ```
+   On Windows:
+   ```
+   venv\Scripts\activate
    ```
 
 4. **Install dependencies:**  
@@ -72,17 +75,17 @@ Develop a machine learning-based solution to detect and prevent common web appli
    cd ML-SQL-Injection
    ```
 
-2. Run the log parser to generate the dataset:
+2. Run the Good_and_Bad_requests.py to generate the dataset:
    ```
-   python log_parser.py
+   python Good_and_Bad_requests.py
    ```
-   ➔ This processes `bad_requests.log` and `good_requests.log` to create `data/demo_good_and_bad_requests.csv`.
+   ➔ This processes `bad_requests.log` and `good_requests.log` to create `Good_and_Bad_requests.csv`.
 
 3. Train the RandomForestClassifier model:
    ```
-   python train_sqli_model.py
+   python Train_SQLi_model.py
    ```
-   ➔ This saves the model to `Attacks_Detection/models/sqli_model.pkl`.
+   ➔ This saves the model to `ML-SQL-Injection/SQLi_Model.pkl`.
 
 ---
 
@@ -95,17 +98,26 @@ Develop a machine learning-based solution to detect and prevent common web appli
 
 2. Run the training script:
    ```
-   python XSS-Doc2Vec-ML-Classifier.py
+   python XSS-Doc2Vec-ML-Classifier-checkpoint.ipynb
    ```
-   ➔ This generates `Attacks_Detection/models/d2v.model` and `Attacks_Detection/models/RandomForestClassifier.sav`.
+   ➔ This generates `ML-XSS/lib/d2v.model`, `ML-XSS/lib/RandomForestClassifier.sav` along with a few other `.sav` models, but `RandomForestClassifier.sav` gives you the highest accuracy.
 
 ---
 
 ## Running the Application
 
+⚠️ **Important:** Make sure to copy the following trained files into the `Attacks_Detection/Models` folder before running:
+- `d2v.model`
+- `RandomForestClassifier.sav`
+- `SQLi_Model.pkl`
+
 1. Activate the virtual environment:
    ```
-   source venv/bin/activate   # On Windows: venv\Scripts\activate
+   source venv/bin/activate
+   ```
+   On Windows:
+   ```
+   venv\Scripts\activate
    ```
 
 2. Navigate to the `Attacks_Detection` directory:
@@ -135,7 +147,7 @@ Develop a machine learning-based solution to detect and prevent common web appli
 | Directory           | Description                        | Key Files                                           |
 |---------------------|------------------------------------|-----------------------------------------------------|
 | Attacks_Detection/   | Main application and models        | app.py, templates/index.html, models/*.sav, models/*.pkl |
-| ML-SQL-Injection/    | SQLi feature extraction and training | log_parser.py, train_sqli_model.py                  |
-| ML-XSS/              | XSS detection and training         | ml_xss.py, XSS-Doc2Vec-ML-Classifier.py             |
-| data/                | Datasets for training/testing      | demo_good_and_bad_requests.csv, httplog.csv, testXSS.txt, testNORM.txt |
+| ML-SQL-Injection/    | SQLi feature extraction and training | Good_and_Bad_requests.py, Train_SQLi_model.py       |
+| ML-XSS/              | XSS detection and training         | ml_xss.py, XSS-Doc2Vec-ML-Classifier-checkpoint.ipynb |
+| data/                | Datasets for training/testing      | Good_and_Bad_requests.csv, httplog.csv, testXSS.txt, testNORM.txt |
 | docs/                | Documentation                     | README.md, Project_Report.tex, Proposed Architecture Diagram.docx |
