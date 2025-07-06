@@ -1,10 +1,11 @@
 # AI-ML for Networking
 
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/d2226bd3-d614-45a4-987c-4990a544fe60" alt="Image 1" width="300"/>
+  <img src="https://github.com/user-attachments/assets/d2226bd3-d614-45a4-987c-4990a544fe60" alt="Image 1" width="500" length="750"/>
   &nbsp;&nbsp;&nbsp;
-  <img src="https://github.com/user-attachments/assets/d2226bd3-d614-45a4-987c-4990a544fe60" alt="Image 2" width="300"/>
+  <img src="https://github.com/user-attachments/assets/d2a26625-4040-4145-9a7b-8d4126460684" alt="Image 2" width="500" length="750"/>
 </p>
+
 
 ## Project Description
 This project implements an AI-driven solution for detecting SQL Injection (SQLi) and Cross-Site Scripting (XSS) attacks in network traffic using machine learning. It features a web interface for real-time threat detection, file upload analysis (CSV, PDF, DOCX, TXT), and detailed logging. The system uses pre-trained models (RandomForestClassifier, Doc2Vec) and integrates a Web Application Firewall (WAF) concept for enhanced security.
