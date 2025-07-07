@@ -163,5 +163,5 @@ Develop a machine learning-based solution to detect and prevent common web appli
 | Directory           | Description                        | Key Files                                           |
 |---------------------|------------------------------------|-----------------------------------------------------|
 | Attacks_Detection/   | Main application and models        | app.py, detection_log.txt, Templates/index.html, Models/*.sav, *.pkl, *.model, Data/*.csv |
-| ML-SQL-Injection/    | SQLi feature extraction and training | Good_and_Bad_requests.py, Train_SQLi_model.py       |
+| ML-SQL-Injection/    | SQLi feature extraction and training | Log/*.log, Good_and_Bad_requests.py, Train_SQLi_model.py       |
 | ML-XSS/              | XSS detection and training         | ML-XSS_Model_Testing.py, .ipynb_checkpoints/XSS-Doc2Vec-ML-Classifier-checkpoint.ipynb, lib/*.sav, *.txt |
