@@ -1,4 +1,9 @@
-# AI-ML_for_Networking
+# AI-ML for Networking
+
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/d2226bd3-d614-45a4-987c-4990a544fe60" alt="Image 1" width="49%">
+  <img src="https://github.com/user-attachments/assets/d2a26625-4040-4145-9a7b-8d4126460684" alt="Image 2" width="49%">
+</p>
 
 ## Project Description
 This project implements an AI-driven solution for detecting SQL Injection (SQLi) and Cross-Site Scripting (XSS) attacks in network traffic using machine learning. It features a web interface for real-time threat detection, file upload analysis (CSV, PDF, DOCX, TXT), and detailed logging. The system uses pre-trained models (RandomForestClassifier, Doc2Vec) and integrates a Web Application Firewall (WAF) concept for enhanced security.
@@ -36,7 +41,7 @@ Develop a machine learning-based solution to detect and prevent common web appli
 
 1. **Clone the repository:**  
    ```
-   git clone https://github.com/your-username/AI-ML_for_Networking.git
+   git clone https://github.com/Rohith-Reddy-Y/AI-ML_for_Networking.git
    ```
 
 2. **Navigate to the project directory:**  
@@ -79,7 +84,7 @@ Develop a machine learning-based solution to detect and prevent common web appli
    ```
    python Good_and_Bad_requests.py
    ```
-   ➔ This processes `bad_requests.log` and `good_requests.log` to create `Good_and_Bad_requests.csv`.
+   ➔ This processes `bad_requests.log` and `good_requests.log` to create `Good_and_Bad_requests_1.csv`.
 
 3. Train the RandomForestClassifier model:
    ```
@@ -96,11 +101,22 @@ Develop a machine learning-based solution to detect and prevent common web appli
    cd ML-XSS
    ```
 
-2. Run the training script:
+2. **Run the training script in Jupyter Notebook:**  
+   Make sure you have Jupyter installed:
    ```
-   python XSS-Doc2Vec-ML-Classifier-checkpoint.ipynb
+   pip install notebook
    ```
-   ➔ This generates `ML-XSS/lib/d2v.model`, `ML-XSS/lib/RandomForestClassifier.sav` along with a few other `.sav` models, but `RandomForestClassifier.sav` gives you the highest accuracy.
+   Then launch the notebook:
+   ```
+   jupyter notebook XSS-Doc2Vec-ML-Classifier-checkpoint.ipynb
+   ```
+   ➔ This will open the notebook in your browser.  
+   ➔ Run all the cells to train the model.
+
+   This generates:
+   - `ML-XSS/lib/d2v.model`
+   - `ML-XSS/lib/RandomForestClassifier.sav` *(best accuracy)*
+   - Other `.sav` models.
 
 ---
 
@@ -146,8 +162,6 @@ Develop a machine learning-based solution to detect and prevent common web appli
 
 | Directory           | Description                        | Key Files                                           |
 |---------------------|------------------------------------|-----------------------------------------------------|
-| Attacks_Detection/   | Main application and models        | app.py, templates/index.html, models/*.sav, models/*.pkl |
+| Attacks_Detection/   | Main application and models        | app.py, detection_log.txt, Templates/index.html, Models/*.sav, *.pkl, *.model, Data/*.csv |
 | ML-SQL-Injection/    | SQLi feature extraction and training | Good_and_Bad_requests.py, Train_SQLi_model.py       |
-| ML-XSS/              | XSS detection and training         | ml_xss.py, XSS-Doc2Vec-ML-Classifier-checkpoint.ipynb |
-| data/                | Datasets for training/testing      | Good_and_Bad_requests.csv, httplog.csv, testXSS.txt, testNORM.txt |
-| docs/                | Documentation                     | README.md, Project_Report.tex, Proposed Architecture Diagram.docx |
+| ML-XSS/              | XSS detection and training         | ML-XSS_Model_Testing.py, .ipynb_checkpoints/XSS-Doc2Vec-ML-Classifier-checkpoint.ipynb, lib/*.sav, *.txt |
