@@ -13,22 +13,23 @@ Network Security
 
 ---
 
-## Prerequisites
+## 🚨 Important: Python Version Requirement (Read Before Installing)
 
-- Python 3.9 or higher  
-- Git for cloning the repository  
-- Optional: Google API Key and Hugging Face API Token for AI threat analysis  
+✅ This project **requires Python 3.9.x to 3.11.x**  
+❌ **Python 3.13 is not supported** and will cause installation errors such as:  
+`BackendUnavailable: Cannot import 'mesonpy'`  
+
+👉 If you are using Python 3.13 or higher:  
+- Download and install Python 3.11.x from: https://www.python.org/downloads/release/python-3113/
+- Create a **new virtual environment** using Python 3.11.
 
 ---
 
-## ⚠️ Important Python Version Notice
+## Prerequisites
 
-✅ This project is **tested and works best with Python versions between 3.9.x and 3.11.x**.  
-❌ **Python 3.13 or higher is not supported** and may result in errors like:  
-```
-BackendUnavailable: Cannot import 'mesonpy'
-```
-👉 If you encounter such errors, please install **Python 3.11.x** from [https://www.python.org/downloads/release/python-3113/](https://www.python.org/downloads/release/python-3113/) and recreate the virtual environment.
+- Python 3.9.x to 3.11.x  
+- Git for cloning the repository  
+- Optional: Google API Key and Hugging Face API Token for AI threat analysis  
 
 ---
 
@@ -82,13 +83,13 @@ Develop a machine learning-based solution to detect and prevent common web appli
 
 ---
 
-## Troubleshooting (Must Read)
+## 🛠 Troubleshooting
 
 | Problem | Cause | Solution |
 |---------|-------|----------|
-| ❌ `BackendUnavailable: Cannot import 'mesonpy'` | Using unsupported **Python 3.13 or higher** | Install **Python 3.11.x** and recreate the virtual environment |
-| ❌ Installation errors (`numpy`, `scikit-learn` issues) | Incompatible Python version | Use **Python 3.11** |
-| ❌ `'python' not recognized` or `'pip' not working` | Virtual environment not activated | Run `venv\Scripts\activate` before commands |
+| ❌ `BackendUnavailable: Cannot import 'mesonpy'` | You are using unsupported **Python 3.13 or higher** | Install **Python 3.11.x** and recreate the virtual environment |
+| ❌ Errors while installing `numpy`, `scikit-learn`, etc. | Incompatible package versions with Python 3.13 | Same as above: switch to Python 3.11 |
+| ❌ Command not recognized (`python`, `pip`) | Virtual environment not activated | Run `venv\Scripts\activate` before running commands |
 
 ---
 
@@ -185,4 +186,4 @@ Develop a machine learning-based solution to detect and prevent common web appli
 |---------------------|------------------------------------|-----------------------------------------------------|
 | Attacks_Detection/   | Main application and models        | app.py, detection_log.txt, Templates/index.html, Models/*.sav, *.pkl, *.model, Data/*.csv |
 | ML-SQL-Injection/    | SQLi feature extraction and training | Log/*.log, Good_and_Bad_requests.py, Train_SQLi_model.py       |
-| ML-XSS/              | XSS detection and training         | ML-XSS_Model_Testing.py, .ipynb_checkpoints/XSS-Doc2Vec-ML-Classifier-checkpoint.ipynb, lib/*.sav, *.txt |
+| ML-XSS/              | XSS detection and training         | ML-XSS_Model_Testing.py, .ipynb_checkpoints/XSS-Doc2Vec-ML-Classifier-checkpoint.ipynb, lib/*.sav, *.txt |  
