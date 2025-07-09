@@ -1,7 +1,7 @@
 numpy==1.26.4
 pandas==1.5.3
 gensim==4.3.3
-nltk==3.9.1
+nltk==3.8.1
 scikit-learn==1.7.0
 python-Levenshtein==0.12.2
 chardet==5.2.0
