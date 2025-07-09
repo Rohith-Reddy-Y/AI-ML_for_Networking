@@ -21,6 +21,17 @@ Network Security
 
 ---
 
+## ⚠️ Important Python Version Notice
+
+✅ This project is **tested and works best with Python versions between 3.9.x and 3.11.x**.  
+❌ **Python 3.13 or higher is not supported** and may result in errors like:  
+```
+BackendUnavailable: Cannot import 'mesonpy'
+```
+👉 If you encounter such errors, please install **Python 3.11.x** from [https://www.python.org/downloads/release/python-3113/](https://www.python.org/downloads/release/python-3113/) and recreate the virtual environment.
+
+---
+
 ## Additional Skills (Recommended for Users)
 
 - Computer Systems Basics – CPU/Memory/Storage/NIC  
@@ -68,6 +79,16 @@ Develop a machine learning-based solution to detect and prevent common web appli
    GOOGLE_API_KEY=your_google_api_key
    HF_API_TOKEN=your_hf_api_token
    ```
+
+---
+
+## Troubleshooting (Must Read)
+
+| Problem | Cause | Solution |
+|---------|-------|----------|
+| ❌ `BackendUnavailable: Cannot import 'mesonpy'` | Using unsupported **Python 3.13 or higher** | Install **Python 3.11.x** and recreate the virtual environment |
+| ❌ Installation errors (`numpy`, `scikit-learn` issues) | Incompatible Python version | Use **Python 3.11** |
+| ❌ `'python' not recognized` or `'pip' not working` | Virtual environment not activated | Run `venv\Scripts\activate` before commands |
 
 ---
 
