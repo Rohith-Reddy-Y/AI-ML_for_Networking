@@ -93,7 +93,7 @@ def log_detection(method, query, sql_features, sql_prediction, xss_features, xss
     """Log detailed detection results to file with UI-matched formatting"""
     timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     
-    log_entry = f"🛡️ Real-Time SQLi & XSS Detection\n"
+    log_entry = f"🛡️ SQLi & XSS Threat Detector\n"
     log_entry += f"Request Method: {method}\n"
     log_entry += f"Input Query: {query}\n"
     log_entry += f"SQL Injection: {sql_result}\n"
