@@ -1,22 +1,25 @@
-# AI-ML for Networking	
+# AI-ML for Networking
 
-<p align="center">	
-  <img src="https://github.com/user-attachments/assets/d2226bd3-d614-45a4-987c-4990a544fe60" alt="Image 1" width="49%">	
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/d2226bd3-d614-45a4-987c-4990a544fe60" alt="Image 1" width="49%">
   <img src="https://github.com/user-attachments/assets/c255b323-f7a0-47b0-b75f-d0356ce70a1f" alt="Image 2" width="48%">
-</p>	
+</p>
 
-This project implements an AI-driven solution for detecting SQL Injection (SQLi) and Cross-Site Scripting (XSS) attacks in network traffic using machine learning. It features a web interface for real-time threat detection, file upload analysis (CSV), and detailed logging. The system uses pre-trained models (RandomForestClassifier, Doc2Vec) and integrates a Web Application Firewall (WAF) concept for enhanced security.	
+This project implements an AI-driven solution for detecting SQL Injection (SQLi) and Cross-Site Scripting (XSS) attacks in network traffic using machine learning. It features a web interface for real-time threat detection, file upload analysis (CSV), and detailed logging. The system uses pre-trained models (RandomForestClassifier, Doc2Vec) and integrates a Web Application Firewall (WAF) concept for enhanced security.
 
-Category: Network Security	
+Category: Network Security
 
-Prerequisites:	
-- Python 3.9 or higher	
-- Git for cloning the repository	
-- Optional: Google API Key and Hugging Face API Token for AI threat analysis	
+## Prerequisites:
+- **Python 3.11.0** (Mandatory)
+- **Git** for cloning the repository
+- **Mandatory:** C++ Build Tools (Install **Desktop Development with C++** from Visual Studio Installer)
+- Optional: Google API Key and Hugging Face API Token for AI threat analysis
 
-⚠️ Important Python Version Notice:	
-✅ This project is tested and works best with Python versions between 3.9.x and 3.11.x.	
-❌ Python 3.13 or higher is not supported and may result in errors like:	
+---
+
+⚠️ **Important Python Version Notice:**  
+✅ This project is tested and works best with **Python 3.11.0**.  
+❌ Python 3.13 or higher is not supported and may result in errors like:
 ```	
 BackendUnavailable: Cannot import 'mesonpy'	
 ```	
@@ -75,7 +78,7 @@ HF_API_TOKEN=your_hf_api_token
 
 Training the Models:	
 
-SQL Injection Model:	
+SQL Injection Model (optional):	
 1. Navigate to the `ML-SQL-Injection` directory:	
 ```	
 cd ML-SQL-Injection	
@@ -93,7 +96,7 @@ python Train_SQLi_model.py
 ```	
 This saves the model to `ML-SQL-Injection/SQLi_Model.pkl`.	
 
-XSS Model:	
+XSS Model (optional):	
 1. Navigate to the `ML-XSS` directory:	
 ```	
 cd ML-XSS	
