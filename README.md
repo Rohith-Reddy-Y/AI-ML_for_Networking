@@ -24,7 +24,7 @@ Category: Network Security
 BackendUnavailable: Cannot import 'mesonpy'	
 ```	
 👉 If you encounter such errors, please install Python 3.11.x from:	
-https://www.python.org/downloads/release/python-3113/	
+https://www.python.org/downloads/release/python-3110/	
 and recreate the virtual environment.	
 
 Additional Skills (Recommended for Users):	
@@ -116,7 +116,12 @@ Run all the cells to train the model.
 This generates:	
 - `ML-XSS/lib/d2v.model`	
 - `ML-XSS/lib/RandomForestClassifier.sav` (best accuracy)	
-- Other `.sav` models.	
+- Other `.sav` models.
+
+3. To test the trained models:
+```
+python ML-XSS_Model_Testing.py
+```
 
 Running the Application:	
 
