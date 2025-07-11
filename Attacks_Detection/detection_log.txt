@@ -149,3 +149,57 @@ XSS Prediction: 0
 
 ================================================================================
 
+🛡️ SQLi & XSS Threat Detector
+Request Method: GET
+Input Query: http://example.com/home?id=2%252UNION%252ALL%252SELECT%252NULL,NULL,NULL%252D%252D
+SQL Injection: SQL Injection Detected
+XSS: No XSS
+
+Timestamp: 2025-07-11 23:40:31
+SQL Features: [0, 0, 1, 0, 0, 2]
+SQL Prediction: 1
+XSS Features: [-0.08361708 -0.09856812  0.12221682  0.04536414  0.09752849  0.06292329
+ -0.04864408 -0.13598229  0.06045182  0.09974989 -0.02528612 -0.0985552
+ -0.01963038  0.06833829 -0.02353304  0.0396594  -0.23661101 -0.00602264
+  0.07425205 -0.06363061  0.          0.          0.          0.
+  0.          0.        ]
+XSS Prediction: 0
+
+================================================================================
+
+🛡️ SQLi & XSS Threat Detector
+Request Method: GET
+Input Query: http://example.com/home?id=2%252UNION%252ALL%252SELECT%252NULL,NULL,NULL%252D%252D
+SQL Injection: SQL Injection Detected
+XSS: No XSS
+
+Timestamp: 2025-07-11 23:40:38
+SQL Features: [0, 0, 1, 0, 0, 2]
+SQL Prediction: 1
+XSS Features: [-0.14828609 -0.06380723  0.24757361  0.07507379  0.23936045  0.10771701
+  0.01004019 -0.22393513  0.03956413  0.0537841  -0.06991694 -0.04769643
+  0.02160539  0.06513986  0.01168816  0.09493858 -0.29180229  0.12602073
+  0.11480737 -0.04993809  0.          0.          0.          0.
+  0.          0.        ]
+XSS Prediction: 0
+
+================================================================================
+
+🛡️ SQLi & XSS Threat Detector
+Request Method: GET
+Input Query: http://example.com/home?id=2%252UNION%252ALL%252SELECT%252NULL,NULL,NULL%252D%252D
+SQL Injection: SQL Injection Detected
+XSS: No XSS
+
+Timestamp: 2025-07-11 23:40:40
+SQL Features: [0, 0, 1, 0, 0, 2]
+SQL Prediction: 1
+XSS Features: [-0.03910593 -0.0111476   0.18245573 -0.01624482  0.17174858  0.02067776
+ -0.02943212 -0.23431519  0.1127851   0.0397845  -0.08941611  0.01885354
+  0.0423445   0.08794451 -0.16479914 -0.08133459 -0.3130042   0.07579255
+  0.13687746 -0.05030007  0.          0.          0.          0.
+  0.          0.        ]
+XSS Prediction: 0
+
+================================================================================
+

@@ -2,6 +2,8 @@
 
 from gensim.models.doc2vec import Doc2Vec, TaggedDocument
 from nltk.tokenize import word_tokenize
+import nltk
+nltk.download('punkt', quiet=True)
 from sklearn import model_selection
 from sklearn.linear_model import LogisticRegression
 from urllib.parse import unquote
