@@ -5,7 +5,7 @@
   <img src="https://github.com/user-attachments/assets/d2a26625-4040-4145-9a7b-8d4126460684" alt="Image 2" width="49%">	
 </p>	
 
-This project implements an AI-driven solution for detecting SQL Injection (SQLi) and Cross-Site Scripting (XSS) attacks in network traffic using machine learning. It features a web interface for real-time threat detection, file upload analysis (CSV, PDF, DOCX, TXT), and detailed logging. The system uses pre-trained models (RandomForestClassifier, Doc2Vec) and integrates a Web Application Firewall (WAF) concept for enhanced security.	
+This project implements an AI-driven solution for detecting SQL Injection (SQLi) and Cross-Site Scripting (XSS) attacks in network traffic using machine learning. It features a web interface for real-time threat detection, file upload analysis (CSV), and detailed logging. The system uses pre-trained models (RandomForestClassifier, Doc2Vec) and integrates a Web Application Firewall (WAF) concept for enhanced security.	
 
 Category: Network Security	
 
@@ -146,7 +146,7 @@ http://localhost:5000
 
 Web Interface Features:	
 - Enter a query for real-time SQLi/XSS detection.	
-- Upload a file (`CSV`, `PDF`, `DOCX`, `TXT`) for batch analysis.	
+- Upload a file (`CSV`) for batch analysis.	
 
 Key Components:	
 
