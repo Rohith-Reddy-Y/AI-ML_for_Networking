@@ -34,7 +34,6 @@ and recreate the virtual environment.
 
 Additional Skills (Recommended for Users):	
 - Computer Systems Basics – CPU/Memory/Storage/NIC	
-- Good hands-on experience on Linux	
 - Programming skills in Python and/or C	
 - Basics of AI/ML	
 
