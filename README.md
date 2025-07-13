@@ -168,5 +168,5 @@ Key Components:
 | ML-SQL-Injection/    | SQLi feature extraction and training | Log/*.log, Good_and_Bad_requests.py, Train_SQLi_model.py |	
 | ML-XSS/              | XSS detection and training         | ML-XSS_Model_Testing.py, .ipynb_checkpoints/XSS-Doc2Vec-ML-Classifier-checkpoint.ipynb, lib/*.sav, *.txt |	
 
-![Repo Views (Not Unique)](https://visitor-badge.laobi.icu/badge?page_id=Rohith-Reddy-Y.AI-ML_for_Networking&left_color=blue&right_color=green&left_text=Repo%20Views)
+![Repo Views (Not Unique)](https://visitor-badge.laobi.icu/badge?page_id=Rohith-Reddy-Y.AI-ML_for_Networking_reset1&left_color=blue&right_color=green&left_text=Repo%20Views)
 
